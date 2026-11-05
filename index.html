@@ -1,0 +1,2112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QUÍMICA - Bioenergética Celular, Dinámica del ATP y Cadena de Transporte (Facultad de Cs. Médicas - UCCuyo)</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- KaTeX for LaTeX rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathWhenReady()"></script>
+
+  <!-- Google Fonts: Outfit & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            accent: {
+              DEFAULT: '#436600',
+              hover: '#355200',
+              light: '#f2f7e8',
+              border: '#c2d699'
+            },
+            mito: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#2563eb',
+              600: '#1d4ed8',
+              800: '#1e40af',
+              900: '#172554'
+            },
+            catab: {
+              50: '#fffbeb',
+              500: '#d97706',
+              600: '#b45309'
+            },
+            atp: {
+              50: '#fef2f2',
+              100: '#fee2e2',
+              500: '#ef4444',
+              600: '#dc2626',
+              700: '#b91c1c'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Estilos de precisión médica */
+    .latex-eq { font-size: 1.05rem; }
+    .glow-cyan { filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6)); }
+    .glow-amber { filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.7)); }
+    .glow-red { filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.7)); }
+    
+    /* Estilo Institucional */
+    .text-accent { color: #436600; }
+    .bg-accent { background-color: #436600; }
+    .bg-accent-hover:hover { background-color: #355200; }
+    .border-accent { border-color: #436600; }
+    .custom-scroll::-webkit-scrollbar,
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scroll::-webkit-scrollbar-track,
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+    .custom-scroll::-webkit-scrollbar-thumb,
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .custom-scroll::-webkit-scrollbar-thumb:hover,
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    
+    .membrane-pattern {
+      background: repeating-linear-gradient(90deg, #fdba74, #fdba74 4px, #f97316 4px, #f97316 8px);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-blue-100 selection:text-blue-900 min-h-screen flex flex-col">
+
+  <!-- ==================== CABECERA INSTITUCIONAL UCCUYO ==================== -->
+  <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50 no-math">
+    <div class="max-w-7xl mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-accent flex items-center justify-center text-white font-bold text-xl shadow-md">
+          Q
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold text-gray-800 tracking-wide uppercase">QUÍMICA MÉDICA Y BIOENERGÉTICA</h1>
+          <p class="text-xs text-gray-500 font-semibold">Curso de Ingreso a Medicina (Facultad de Cs. Médicas - UCCuyo)</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <!-- Botón Vademécum Bioquímico / Fórmulas -->
+        <button onclick="openFormulasModal()" class="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg border border-gray-200 hover:bg-gray-200 transition">
+          <i class="fa-solid fa-book-bookmark text-accent"></i>
+          <span class="hidden sm:inline">Vademécum</span>
+        </button>
+        <!-- Botón Guía de Uso -->
+        <button onclick="openTutorial()" class="flex items-center gap-1.5 px-3 py-1.5 bg-accent text-white text-xs font-semibold rounded-lg shadow-sm hover:opacity-90 transition">
+          <i class="fa-solid fa-circle-question"></i>
+          <span>Guía de Uso</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== CONTENEDOR PRINCIPAL CON BARRA LATERAL ==================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 flex flex-col lg:flex-row gap-6">
+    
+    <!-- Menú de Navegación Lateral en 2 Columnas -->
+    <nav class="w-full lg:w-64 shrink-0 flex flex-row lg:flex-col gap-2 bg-white p-3 rounded-2xl shadow-sm border border-gray-200 overflow-x-auto lg:overflow-x-visible whitespace-nowrap lg:whitespace-normal sticky top-20 h-fit" id="navTabs">
+      <button onclick="switchTab('mod1')" id="tab-btn-mod1" data-tab="mod1" class="nav-btn bg-accent text-white flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold transition shadow-sm flex items-center gap-2">
+        <i class="fa-solid fa-bolt"></i> <span>1. Gibbs & Metabolismo</span>
+      </button>
+      <button onclick="switchTab('mod2')" id="tab-btn-mod2" data-tab="mod2" class="nav-btn text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-medium transition flex items-center gap-2">
+        <i class="fa-solid fa-battery-three-quarters"></i> <span>2. ATP & Rigor Mortis</span>
+      </button>
+      <button onclick="switchTab('mod3')" id="tab-btn-mod3" data-tab="mod3" class="nav-btn text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-medium transition flex items-center gap-2">
+        <i class="fa-solid fa-arrows-split-up-and-left"></i> <span>3. Mitocondria & ANT</span>
+      </button>
+      <button onclick="switchTab('mod4')" id="tab-btn-mod4" data-tab="mod4" class="nav-btn text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-medium transition flex items-center gap-2">
+        <i class="fa-solid fa-atom"></i> <span>4. Cadena Respiratoria</span>
+      </button>
+      <button onclick="switchTab('mod5')" id="tab-btn-mod5" data-tab="mod5" class="nav-btn text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-medium transition flex items-center gap-2">
+        <i class="fa-solid fa-heart-pulse"></i> <span>5. Patología & Shock</span>
+      </button>
+      <button onclick="switchTab('mod6')" id="tab-btn-mod6" data-tab="mod6" class="nav-btn text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-medium transition flex items-center gap-2 border-t lg:border-t border-gray-100">
+        <i class="fa-solid fa-network-wired text-accent"></i> <span>6. Flujo Integrado</span>
+      </button>
+    </nav>
+
+    <!-- Área de Módulos Didácticos -->
+    <div class="flex-1 min-w-0 space-y-6">
+
+    <!-- ========================================================================= -->
+    <!-- MÓDULO 1: METABOLISMO INTEGRADO Y TERMODINÁMICA DE GIBBS -->
+    <!-- ========================================================================= -->
+    <section id="mod1" class="module-pane space-y-8 block">
+      
+      <!-- Banner Introductorio -->
+      <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 rounded-2xl p-6 sm:p-8 text-white shadow-xl">
+        <div class="max-w-3xl">
+          <div class="inline-block px-3 py-1 bg-blue-500/30 border border-blue-400/40 rounded-full text-blue-200 text-xs font-semibold uppercase tracking-wider mb-3">
+            Módulo Didáctico 1 • Biofísica y Termodinámica Bioquímica
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-2 tracking-tight">Metabolismo Celular y la Energía Libre de Gibbs</h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            Las células vivas son sistemas abiertos no en equilibrio que intercambian materia y energía con el entorno. La dirección y viabilidad de las transformaciones moleculares están regidas estrictamente por la segunda ley de la termodinámica formulada a través de la función de estado de Gibbs a temperatura (<span class="text-cyan-300 font-mono font-bold">$T = 310.15\,\text{K} \approx 37^\circ\text{C}$</span>) y presión constantes.
+          </p>
+        </div>
+      </div>
+
+      <!-- Cuadrante Interactivo: Catabolismo vs Anabolismo -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Catabolismo Card -->
+        <div class="bg-white rounded-2xl border border-amber-200/80 shadow-sm p-6 relative overflow-hidden transition-all hover:shadow-md">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-bl-full -z-0"></div>
+          <div class="relative z-10">
+            <div class="flex items-center justify-between mb-4">
+              <span class="px-3 py-1 bg-amber-100 text-amber-800 font-bold text-xs uppercase tracking-wider rounded-lg flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-amber-600 animate-pulse"></span> Vertiente Oxidativa
+              </span>
+              <span class="text-xs font-mono font-bold text-amber-600">$\Delta G < 0$ (Exergónico)</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Catabolismo: Degradación y Liberación Energética</h3>
+            <p class="text-slate-600 text-sm mb-4 leading-relaxed">
+              Vías convergentes de fragmentación molecular donde macromoléculas ricas en electrones se degradan por oxidación progresiva hacia metabolitos de bajo peso molecular ($\text{CO}_2, \text{H}_2\text{O}, \text{NH}_3$).
+            </p>
+            <div class="bg-amber-50/70 rounded-xl p-4 border border-amber-200 text-xs space-y-2 text-slate-700">
+              <div class="flex items-start gap-2">
+                <span class="text-amber-600 font-bold">•</span>
+                <span><strong>Sustratos:</strong> Glúcidos (glucosa), Lípidos (ácidos grasos, triglicéridos), Proteínas (aminoácidos).</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="text-amber-600 font-bold">•</span>
+                <span><strong>Tráfico de Electrones:</strong> Reacciones oxidativas con transferencia de $2\,\text{e}^- + 2\,\text{H}^+$ hacia coenzimas aceptoras ($\text{NAD}^+, \text{FAD}$).</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="text-amber-600 font-bold">•</span>
+                <span><strong>Rendimiento:</strong> Generación neta de $\text{ATP}$ por fosforilación a nivel de sustrato y fosforilación oxidativa.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Anabolismo Card -->
+        <div class="bg-white rounded-2xl border border-blue-200/80 shadow-sm p-6 relative overflow-hidden transition-all hover:shadow-md">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full -z-0"></div>
+          <div class="relative z-10">
+            <div class="flex items-center justify-between mb-4">
+              <span class="px-3 py-1 bg-blue-100 text-blue-800 font-bold text-xs uppercase tracking-wider rounded-lg flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-blue-600"></span> Vertiente Biosintética
+              </span>
+              <span class="text-xs font-mono font-bold text-blue-700">$\Delta G > 0$ (Endergónico)</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Anabolismo: Síntesis Reductora y Demanda Energética</h3>
+            <p class="text-slate-600 text-sm mb-4 leading-relaxed">
+              Vías divergentes dedicadas al ensamblaje de biomoléculas estructurales y de información compleja a partir de precursores monoméricos elementales, requiriendo aporte continuo de trabajo químico.
+            </p>
+            <div class="bg-blue-50/70 rounded-xl p-4 border border-blue-200 text-xs space-y-2 text-slate-700">
+              <div class="flex items-start gap-2">
+                <span class="text-blue-600 font-bold">•</span>
+                <span><strong>Biosíntesis:</strong> Proteínas (traducción), Glucógeno (glucogénesis), Ácidos nucleicos ($\text{ADN}, \text{ARN}$), Membranas lipídicas.</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="text-blue-600 font-bold">•</span>
+                <span><strong>Poder Reductor:</strong> Empleo de $\text{NADPH}$ como donante específico de equivalentes de reducción.</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="text-blue-600 font-bold">•</span>
+                <span><strong>Acoplamiento Obligatorio:</strong> Solo avanzan energéticamente acopladas a la hidrólisis altamente favorable de $\text{ATP}$.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Simulador de Coordenada de Reacción & Distinción Termodinámica vs Cinética -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-6">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Simulador Biofísico</span>
+            <h3 class="text-xl font-bold text-slate-900 mt-1">Coordenada de Reacción y Perfil de Energía Libre ($\Delta G$)</h3>
+            <p class="text-slate-500 text-xs sm:text-sm">Explore la diferencia fundamental entre viabilidad termodinámica ($\Delta G$) y velocidad enzimática (Cinética y Energía de Activación $E_a$).</p>
+          </div>
+          <!-- Controles de la simulación -->
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="btn-exergonic" onclick="setReactionType('exergonic')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-emerald-600 text-white shadow-sm">
+              Exergónica ($\Delta G < 0$)
+            </button>
+            <button id="btn-endergonic" onclick="setReactionType('endergonic')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-slate-100 text-slate-700 hover:bg-slate-200">
+              Endergónica ($\Delta G > 0$)
+            </button>
+            <button id="btn-enzyme" onclick="toggleEnzyme()" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all border border-indigo-400 bg-indigo-50 text-indigo-700">
+              <span id="enzyme-status-text">⚡ Enzima: ACTIVADA</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <!-- Canvas Gráfico -->
+          <div class="lg:col-span-7 bg-slate-900 rounded-xl p-4 shadow-inner relative flex flex-col justify-center items-center">
+            <canvas id="gibbsCanvas" width="560" height="320" class="w-full h-auto max-h-[340px] block"></canvas>
+            <div class="w-full flex justify-between text-[11px] text-slate-400 px-3 pt-2 font-mono">
+              <span>Reactivos (Estado Inicial)</span>
+              <span>Estado de Transición ($\ddagger$)</span>
+              <span>Productos (Estado Final)</span>
+            </div>
+          </div>
+
+          <!-- Panel Analítico y Ecuaciones -->
+          <div class="lg:col-span-5 space-y-4">
+            
+            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Ecuación Fundamental de Gibbs</h4>
+              <div class="py-2 text-center bg-white rounded-lg border border-slate-200 font-mono text-slate-800">
+                $$\Delta G = \Delta H - T \Delta S$$
+              </div>
+              <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                A presión y temperatura fisiológica constante ($T = 37^\circ\text{C}$), la variación de energía libre ($\Delta G$) define la cantidad máxima de trabajo útil que un sistema celular puede realizar.
+              </p>
+            </div>
+
+            <!-- Monitor Dinámico de Valores -->
+            <div class="p-4 bg-blue-50/60 rounded-xl border border-blue-100 space-y-2.5">
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-semibold text-slate-600">Energía de Reactivos ($G_{\text{inicial}}$):</span>
+                <span id="val-g-react" class="font-mono font-bold text-slate-800">80.0 kcal/mol</span>
+              </div>
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-semibold text-slate-600">Energía de Productos ($G_{\text{final}}$):</span>
+                <span id="val-g-prod" class="font-mono font-bold text-slate-800">30.0 kcal/mol</span>
+              </div>
+              <div class="flex justify-between items-center text-xs border-t border-blue-200 pt-2">
+                <span class="font-bold text-slate-900">Variación Neta ($\Delta G = G_f - G_i$):</span>
+                <span id="val-delta-g" class="font-mono font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">-50.0 kcal/mol</span>
+              </div>
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-semibold text-slate-600">Barrera de Activación ($E_a$):</span>
+                <span id="val-ea" class="font-mono font-bold text-indigo-700">18.0 kcal/mol</span>
+              </div>
+            </div>
+
+            <!-- Paradoja Biomédica: Glucosa vs Cinética -->
+            <div class="p-3.5 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-900 leading-snug">
+              <strong class="font-bold flex items-center gap-1 text-amber-800 mb-1">
+                <svg class="w-4 h-4 text-amber-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                Correlación Médica: Termodinámica $\neq$ Velocidad
+              </strong>
+              La oxidación de la glucosa ($\text{C}_6\text{H}_{12}\text{O}_6 + 6\,\text{O}_2 \to 6\,\text{CO}_2 + 6\,\text{H}_2\text{O}$) posee un $\Delta G^{\circ\prime} = -686\,\text{kcal/mol}$ colosalmente favorable. Sin embargo, un frasco con glucosa a temperatura ambiente permanece intacto durante décadas debido a una colosal barrera de activación ($E_a$). La vida depende de <em>enzimas biocatalizadoras</em> que disminuyen la $E_a$ sin modificar el $\Delta G$.
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- ========================================================================= -->
+    <!-- MÓDULO 2: ESTRUCTURA QUÍMICA, HIDRÓLISIS DEL ATP Y RIGOR MORTIS -->
+    <!-- ========================================================================= -->
+    <section id="mod2" class="module-pane space-y-8 hidden">
+      
+      <!-- Banner Introductorio -->
+      <div class="bg-gradient-to-r from-red-900 via-rose-900 to-slate-900 rounded-2xl p-6 sm:p-8 text-white shadow-xl">
+        <div class="max-w-3xl">
+          <div class="inline-block px-3 py-1 bg-red-500/30 border border-red-400/40 rounded-full text-red-200 text-xs font-semibold uppercase tracking-wider mb-3">
+            Módulo Didáctico 2 • Bioquímica Molecular de Nucleótidos & Fisiología
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-2 tracking-tight">Anatomía Química del ATP y Dinámica de Acoplamiento</h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            El adenosín trifosfato ($\text{ATP}$) <strong>no es un reservorio energético a largo plazo</strong> (función exclusiva del glucógeno y triglicéridos adiposos), sino una moneda de intercambio inmediato de altísimo recambio: el cuerpo humano adulto cicla diariamente su propio peso corporal en $\text{ATP}$.
+          </p>
+        </div>
+      </div>
+
+      <!-- La Triada del Trabajo Celular impulsado por ATP -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center font-bold text-lg mb-3">1</div>
+          <h4 class="font-bold text-slate-900 text-base mb-1">Trabajo Mecánico</h4>
+          <p class="text-slate-600 text-xs leading-relaxed">
+            Desplazamiento conformacional de miofilamentos de actina y miosina en la contracción de la fibra muscular estriada miocárdica y esquelética, motilidad de cilios y movimiento vesicular por kinesinas.
+          </p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-lg mb-3">2</div>
+          <h4 class="font-bold text-slate-900 text-base mb-1">Trabajo de Transporte y Eléctrico</h4>
+          <p class="text-slate-600 text-xs leading-relaxed">
+            Bombeo activo contra gradiente electroquímico. La <span class="font-semibold text-blue-700">bomba $\text{Na}^+/\text{K}^+\text{ ATPasa}$</span> consume hasta el 40% del $\text{ATP}$ basal del sistema nervioso central para mantener el potencial de membrana en reposo ($-70\,\text{mV}$).
+          </p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-lg mb-3">3</div>
+          <h4 class="font-bold text-slate-900 text-base mb-1">Trabajo Químico Biosintético</h4>
+          <p class="text-slate-600 text-xs leading-relaxed">
+            Fosforilación acoplada de intermediarios metabólicos para vencer el umbral endergónico positivo ($\Delta G > 0$) en la síntesis de macromoléculas como péptidos, glucógeno, urea y replicación del genoma.
+          </p>
+        </div>
+      </div>
+
+      <!-- Simulador de Tensión Electroquímica y "Resorte Molecular" del ATP -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-6">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-rose-600 bg-rose-50 px-2.5 py-1 rounded-md">Biofísica de la Repulsión de Cargas</span>
+            <h3 class="text-xl font-bold text-slate-900 mt-1">El ATP como un "Resorte Químico Comprimido"</h3>
+            <p class="text-slate-500 text-xs sm:text-sm">A $\text{pH}$ fisiológico ($7.4$), los 3 grupos fosfato ($\alpha, \beta, \gamma$) acumulan cuatro cargas netas negativas contiguas que generan una extrema tensión electrostática.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="btn-hydrolyze" onclick="triggerAtpHydrolysis()" class="px-4 py-2 rounded-xl text-xs font-bold bg-rose-600 text-white shadow-md hover:bg-rose-700 transition flex items-center gap-1.5">
+              <span>💧 Realizar Hidrólisis ($\text{+ H}_2\text{O}$)</span>
+            </button>
+            <button id="btn-reset-atp" onclick="resetAtpMolecule()" class="px-3 py-2 rounded-xl text-xs font-bold border border-slate-300 bg-slate-50 text-slate-700 hover:bg-slate-100">
+              Recargar $\text{ATP}$
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          <!-- Representación Molecular Dinámica (SVG Interactivo) -->
+          <div class="lg:col-span-8 bg-slate-900 rounded-2xl p-6 relative overflow-hidden shadow-inner text-white flex flex-col items-center justify-center min-h-[300px]">
+            
+            <svg id="atpSvg" viewBox="0 0 700 240" class="w-full h-auto max-h-[250px]">
+              <defs>
+                <radialGradient id="gradBase" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#38bdf8"/>
+                  <stop offset="100%" stop-color="#0284c7"/>
+                </radialGradient>
+                <radialGradient id="gradRibose" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#34d399"/>
+                  <stop offset="100%" stop-color="#059669"/>
+                </radialGradient>
+                <radialGradient id="gradPhos" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#f87171"/>
+                  <stop offset="100%" stop-color="#dc2626"/>
+                </radialGradient>
+                <filter id="chargeGlow">
+                  <feGaussianBlur stdDeviation="3" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+
+              <!-- Conector Adenina a Ribosa -->
+              <line x1="120" y1="120" x2="190" y2="120" stroke="#64748b" stroke-width="4" stroke-dasharray="2,2"/>
+
+              <!-- Adenina (Base Nitrogenada) -->
+              <g transform="translate(40, 70)">
+                <polygon points="40,0 80,25 80,75 40,100 0,75 0,25" fill="url(#gradBase)" stroke="#bae6fd" stroke-width="2"/>
+                <text x="40" y="55" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="bold">ADENINA</text>
+                <text x="40" y="70" text-anchor="middle" fill="#e0f2fe" font-size="9">Base Púrica</text>
+              </g>
+
+              <!-- Ribosa (Aldopentosa) -->
+              <g transform="translate(190, 75)">
+                <polygon points="45,0 85,35 70,85 20,85 5,35" fill="url(#gradRibose)" stroke="#a7f3d0" stroke-width="2"/>
+                <text x="45" y="48" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="bold">RIBOSA</text>
+                <text x="45" y="63" text-anchor="middle" fill="#d1fae5" font-size="9">Pentosa</text>
+              </g>
+
+              <!-- Conexión Éster Fosfato (Ribosa a Alfa-Fosfato) -->
+              <line x1="275" y1="120" x2="330" y2="120" stroke="#cbd5e1" stroke-width="4"/>
+
+              <!-- Enlace Alfa Fosfato -->
+              <g id="group-alpha" transform="translate(330, 80)">
+                <circle cx="35" cy="40" r="32" fill="url(#gradPhos)" stroke="#fecaca" stroke-width="2"/>
+                <text x="35" y="38" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="extrabold">$\alpha$</text>
+                <text x="35" y="52" text-anchor="middle" fill="#fee2e2" font-size="9">Fosfato</text>
+                <circle cx="58" cy="18" r="10" fill="#991b1b" filter="url(#chargeGlow)"/>
+                <text x="58" y="22" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">-</text>
+              </g>
+
+              <!-- Enlace Fosfoanhídrido 1 (Resorte) -->
+              <g id="spring1" transform="translate(400, 110)">
+                <path d="M0,10 Q8,0 16,10 T32,10" fill="none" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/>
+                <text x="16" y="-6" text-anchor="middle" fill="#fbbf24" font-size="8" font-family="monospace">Anhídrido</text>
+              </g>
+
+              <!-- Beta Fosfato -->
+              <g id="group-beta" transform="translate(435, 80)">
+                <circle cx="35" cy="40" r="32" fill="url(#gradPhos)" stroke="#fecaca" stroke-width="2"/>
+                <text x="35" y="38" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="extrabold">$\beta$</text>
+                <text x="35" y="52" text-anchor="middle" fill="#fee2e2" font-size="9">Fosfato</text>
+                <circle cx="58" cy="18" r="10" fill="#991b1b" filter="url(#chargeGlow)"/>
+                <text x="58" y="22" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">-</text>
+              </g>
+
+              <!-- Enlace Fosfoanhídrido 2 (Resorte Terminal de Alta Tensión) -->
+              <g id="spring2" transform="translate(505, 110)">
+                <path id="spring2-path" d="M0,10 Q8,0 16,10 T32,10" fill="none" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/>
+                <text id="spring2-txt" x="16" y="-6" text-anchor="middle" fill="#f87171" font-size="9" font-weight="bold">Alta Tensión</text>
+              </g>
+
+              <!-- Gamma Fosfato (Terminal Hidrolizable) -->
+              <g id="group-gamma" class="transition-transform duration-700 ease-out" transform="translate(540, 80)">
+                <circle cx="35" cy="40" r="32" fill="url(#gradPhos)" stroke="#fecaca" stroke-width="2"/>
+                <text x="35" y="38" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="extrabold">$\gamma$</text>
+                <text x="35" y="52" text-anchor="middle" fill="#fee2e2" font-size="9">Fosfato</text>
+                <!-- Dos cargas negativas en el grupo terminal -->
+                <circle cx="58" cy="18" r="10" fill="#991b1b" filter="url(#chargeGlow)"/>
+                <text x="58" y="22" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">-</text>
+                <circle cx="12" cy="18" r="10" fill="#991b1b" filter="url(#chargeGlow)"/>
+                <text x="12" y="22" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">-</text>
+              </g>
+
+              <!-- Efecto de Repulsión Flechas -->
+              <g id="repulsion-arrows" opacity="1">
+                <path d="M 470,60 L 530,60" stroke="#fcd34d" stroke-width="2" marker-end="url(#arrow)"/>
+                <path d="M 530,60 L 470,60" stroke="#fcd34d" stroke-width="2"/>
+                <text x="500" y="50" fill="#fde047" font-size="9" text-anchor="middle" font-weight="bold">Repulsión 4 Cargas (-)</text>
+              </g>
+            </svg>
+
+            <!-- Banner Estado de la molécula -->
+            <div id="atp-state-banner" class="mt-2 text-xs font-mono text-center text-slate-300">
+              Estado: <span class="text-amber-400 font-bold">$\text{ATP}^{4-}$ Intacto</span> • Repulsión electrostática máxima en enlaces fosfoanhídrido
+            </div>
+
+          </div>
+
+          <!-- Datos Cuantitativos de Hidrólisis -->
+          <div class="lg:col-span-4 space-y-4">
+            <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Reacción Termodinámica de Hidrólisis</h4>
+              <div class="text-xs font-mono bg-white p-2.5 rounded border border-slate-200 text-slate-800 my-2 text-center overflow-x-auto">
+                $$\text{ATP}^{4-} + \text{H}_2\text{O} \rightleftharpoons \text{ADP}^{3-} + \text{P}_i^{2-} + \text{H}^+$$
+              </div>
+              <div class="flex items-center justify-between text-xs pt-1">
+                <span class="text-slate-600 font-medium">$\Delta G^{\circ\prime}$ estándar fisiológico:</span>
+                <span class="font-bold text-red-600 font-mono">-7.3 kcal/mol</span>
+              </div>
+              <div class="flex items-center justify-between text-xs pt-1">
+                <span class="text-slate-600 font-medium">Equivalente en el SI:</span>
+                <span class="font-bold text-red-600 font-mono">-30.5 kJ/mol</span>
+              </div>
+            </div>
+
+            <!-- Causas Bioquímicas del Gran $\Delta G$ Negativo -->
+            <div class="text-xs space-y-2 text-slate-600 bg-red-50/50 p-3.5 rounded-xl border border-red-100">
+              <div class="font-bold text-slate-800">¿Por qué la hidrólisis libera tanta energía libre?</div>
+              <p><strong>1. Alivio de Repulsión Electrostática:</strong> Se separa el grupo $\gamma$-fosfato con sus cargas negativas de la masa $\beta/\alpha$.</p>
+              <p><strong>2. Estabilización por Resonancia:</strong> El ortofosfato libre ($\text{P}_i$) posee 4 estructuras de resonancia equivalentes, estabilizando los productos.</p>
+              <p><strong>3. Mayor Hidratación:</strong> $\text{ADP} + \text{P}_i$ forman más puentes de hidrógeno con el agua que el reactivo original.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CASO FORENSE / CLÍNICO: RIGOR MORTIS INTERACTIVO -->
+      <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-6 sm:p-8 shadow-xl">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-700 pb-5 mb-6">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-rose-400 bg-rose-950/80 border border-rose-800 px-2.5 py-1 rounded-md">
+              Fisiopatología Forense • Caso Clínico
+            </span>
+            <h3 class="text-xl sm:text-2xl font-bold mt-2 text-white">Rigor Mortis: La Paradoja de la Rigidez Cadavérica</h3>
+            <p class="text-slate-300 text-xs sm:text-sm">Demostración molecular de por qué <em>la relajación muscular es un proceso biológico activo dependiente de ATP</em> y no un estado pasivo.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="btn-rigor-toggle" onclick="toggleRigorMortisSimulation()" class="px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-600 text-slate-900 transition flex items-center gap-2 shadow-lg">
+              <span id="rigor-icon">⚡</span>
+              <span id="rigor-btn-text">Simular Muerte Somática (Cese de ATP)</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          
+          <!-- Simulación de Puentes Cruzados (Miofilamentos) -->
+          <div class="lg:col-span-7 bg-slate-950 rounded-xl p-5 border border-slate-800 flex flex-col items-center">
+            
+            <svg id="rigorSvg" viewBox="0 0 500 200" class="w-full h-auto max-h-[220px]">
+              <!-- Filamento Delgado de Actina (Doble hélice con sitios de unión) -->
+              <g id="actin-filament">
+                <line x1="20" y1="40" x2="480" y2="40" stroke="#38bdf8" stroke-width="12" stroke-linecap="round"/>
+                <!-- Monómeros de actina -->
+                <circle cx="60" cy="40" r="10" fill="#0284c7"/>
+                <circle cx="110" cy="40" r="10" fill="#0284c7"/>
+                <circle cx="160" cy="40" r="10" fill="#0284c7"/>
+                <circle cx="210" cy="40" r="10" fill="#0284c7"/>
+                <circle cx="260" cy="40" r="10" fill="#0284c7"/>
+                <circle cx="310" cy="40" r="10" fill="#0284c7"/>
+                <circle cx="360" cy="40" r="10" fill="#0284c7"/>
+                <circle cx="410" cy="40" r="10" fill="#0284c7"/>
+                <text x="470" y="25" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="end">Filamento de Actina</text>
+              </g>
+
+              <!-- Filamento Grueso de Miosina Base -->
+              <line x1="20" y1="170" x2="480" y2="170" stroke="#f97316" stroke-width="14" stroke-linecap="round"/>
+              <text x="470" y="192" fill="#fb923c" font-size="10" font-weight="bold" text-anchor="end">Filamento de Miosina</text>
+
+              <!-- Cabeza de Miosina Móvil -->
+              <g id="myosin-head" class="transition-all duration-500 ease-in-out" transform="translate(250, 160)">
+                <!-- Brazo articulado -->
+                <line id="myosin-arm" x1="0" y1="0" x2="-20" y2="-80" stroke="#ea580c" stroke-width="8" stroke-linecap="round"/>
+                <!-- Cabeza globular en ángulo de 45° (acoplada fuertemente) -->
+                <ellipse id="myosin-globe" cx="-25" cy="-90" rx="18" ry="12" fill="#fdba74" stroke="#c2410c" stroke-width="2" transform="rotate(-30 -25 -90)"/>
+                <!-- Molécula de ATP unida / ausente -->
+                <g id="myosin-atp-binding" transform="translate(-25, -95)">
+                  <circle id="atp-dot" cx="0" cy="0" r="8" fill="#ef4444" opacity="1"/>
+                  <text id="atp-dot-txt" x="0" y="3" text-anchor="middle" fill="#fff" font-size="7" font-weight="bold">ATP</text>
+                </g>
+              </g>
+            </svg>
+
+            <div id="rigor-step-description" class="mt-3 text-xs bg-slate-900 border border-slate-700 text-slate-200 px-4 py-2.5 rounded-lg w-full text-center">
+              <strong class="text-emerald-400">Estado Fisiológico Normal:</strong> La unión de una nueva molécula de $\text{ATP}$ disocia el complejo actina-miosina, permitiendo la relajación muscular.
+            </div>
+
+          </div>
+
+          <!-- Explicación Fisiopatológica -->
+          <div class="lg:col-span-5 space-y-3 text-xs text-slate-300">
+            <div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700 space-y-2">
+              <h5 class="text-sm font-bold text-amber-400 flex items-center gap-1.5">
+                <span>⚖️</span> Secuencia Mecanística Post Mortem
+              </h5>
+              <p>
+                1. <strong>Cese circulatorio y anoxia:</strong> Tras la muerte se detiene el aporte de $\text{O}_2$. La fosforilación oxidativa mitocondrial colapsa en segundos.
+              </p>
+              <p>
+                2. <strong>Agotamiento de las reservas de fosfocreatina y glucógeno:</strong> El $\text{ATP}$ citosólico desciende a cero de forma irreversible.
+              </p>
+              <p>
+                3. <strong>Fijación irreversible del puente cruzado:</strong> Sin $\text{ATP}$ disponible, la cabeza de miosina es incapaz de despegarse del filamento de actina. Los puentes quedan "bloqueados" rígidamente a $45^\circ$.
+              </p>
+              <p>
+                4. <strong>Resolución tardía:</strong> La rigidez solo desaparece 24-48 h después debido a la <em>autólisis enzimática proteolítica cadavérica</em> (destrucción lisosomal de miofilamentos), jamás por relajación activa.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- ========================================================================= -->
+    <!-- MÓDULO 3: ARQUITECTURA MITOCONDRIAL Y TRANSPORTE DE NUCLEÓTIDOS -->
+    <!-- ========================================================================= -->
+    <section id="mod3" class="module-pane space-y-8 hidden">
+      
+      <!-- Banner Introductorio -->
+      <div class="bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 rounded-2xl p-6 sm:p-8 text-white shadow-xl">
+        <div class="max-w-3xl">
+          <div class="inline-block px-3 py-1 bg-cyan-500/30 border border-cyan-400/40 rounded-full text-cyan-200 text-xs font-semibold uppercase tracking-wider mb-3">
+            Módulo Didáctico 3 • Compartimentación Subcelular
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-2 tracking-tight">Arquitectura Mitocondrial y Antiporte ADP-ATP</h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            La síntesis de energía exige una estricta barrera de permeabilidad. La mitocondria divide los procesos bioenergéticos en cuatro subcompartimentos especializados, resolviendo la exportación neta del nucleótido mediante la ADP-ATP Translocasa (ANT).
+          </p>
+        </div>
+      </div>
+
+      <!-- Cuatro Compartimentos Mitocondriales -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="w-3 h-3 rounded-full bg-slate-400"></span>
+              <span class="text-[10px] uppercase font-bold text-slate-400">Exterior</span>
+            </div>
+            <h4 class="font-bold text-slate-900 text-sm mb-1.5">Membrana Externa</h4>
+            <p class="text-xs text-slate-600 leading-relaxed mb-3">
+              Permeable a metabolitos pequeños ($< 5\,\text{kDa}$) gracias a canales de <strong>porina dependientes de voltaje (VDAC)</strong>. Libre paso para piruvato, sustratos y nucleótidos.
+            </p>
+          </div>
+          <div class="text-[11px] font-mono text-slate-500 bg-slate-50 p-2 rounded-lg border border-slate-100">
+            Filtro de tamaño pasivo
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-cyan-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="w-3 h-3 rounded-full bg-cyan-500 animate-pulse"></span>
+              <span class="text-[10px] uppercase font-bold text-cyan-600">Compartimento H+</span>
+            </div>
+            <h4 class="font-bold text-slate-900 text-sm mb-1.5">Espacio Intermembranoso</h4>
+            <p class="text-xs text-slate-600 leading-relaxed mb-3">
+              Cámara de acumulación de protones expulsados por la cadena respiratoria. Presenta un $\text{pH} \approx 6.8$ (más ácido que el citosol y la matriz), creando una batería electroquímica.
+            </p>
+          </div>
+          <div class="text-[11px] font-mono text-cyan-700 bg-cyan-50 p-2 rounded-lg border border-cyan-100">
+            $\text{pH} \approx 6.8 \implies$ Alto $[\text{H}^+]$
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-blue-300 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="w-3 h-3 rounded-full bg-blue-600"></span>
+              <span class="text-[10px] uppercase font-bold text-blue-600">Barrera Absoluta</span>
+            </div>
+            <h4 class="font-bold text-slate-900 text-sm mb-1.5">Membrana Interna y Crestas</h4>
+            <p class="text-xs text-slate-600 leading-relaxed mb-3">
+              Impermeable incluso a iones pequeños ($\text{H}^+, \text{Na}^+, \text{K}^+$) gracias a su alto contenido de <strong>cardiolipina</strong>. Aloja los Complejos $\text{I-IV}$ y la $\text{ATP}$ sintasa en sus pliegues (crestas).
+            </p>
+          </div>
+          <div class="text-[11px] font-mono text-blue-700 bg-blue-50 p-2 rounded-lg border border-blue-100">
+            Aislante eléctrico de protones
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-indigo-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="w-3 h-3 rounded-full bg-indigo-600"></span>
+              <span class="text-[10px] uppercase font-bold text-indigo-600">Cámara Catalítica</span>
+            </div>
+            <h4 class="font-bold text-slate-900 text-sm mb-1.5">Matriz Mitocondrial</h4>
+            <p class="text-xs text-slate-600 leading-relaxed mb-3">
+              Fase gel densa rica en enzimas de descarboxilación del piruvato, $\beta$-oxidación de ácidos grasos, Ciclo del Ácido Cítrico (Krebs), genoma mitocondrial ($\text{ADNmt}$) y ribosomas 70S.
+            </p>
+          </div>
+          <div class="text-[11px] font-mono text-indigo-700 bg-indigo-50 p-2 rounded-lg border border-indigo-100">
+            $\text{pH} \approx 7.8 \implies$ Alcalino
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Mecanismo Antiporte ADP-ATP Translocasa (ANT) -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+        <div class="border-b border-slate-100 pb-5 mb-6">
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">Biofísica de Transporte Vectorial</span>
+          <h3 class="text-xl font-bold text-slate-900 mt-1">El Dilema del Confinamiento Energético: ADP-ATP Translocasa</h3>
+          <p class="text-slate-500 text-xs sm:text-sm">El $\text{ATP}$ sintetizado en la matriz debe abastecer las demandas citoplásmicas. El translocador ANT intercambia $\text{ATP}^{4-}$ hacia el exterior por $\text{ADP}^{3-}$ hacia la matriz.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          <!-- Esquema Interactivo de Transporte Transmembrana -->
+          <div class="lg:col-span-7 bg-slate-900 rounded-2xl p-6 shadow-inner text-white flex flex-col items-center">
+            
+            <svg viewBox="0 0 540 280" class="w-full h-auto">
+              <!-- Espacio Intermembranoso -->
+              <rect x="10" y="10" width="520" height="60" fill="#0c4a6e" rx="8"/>
+              <text x="30" y="35" fill="#7dd3fc" font-size="12" font-weight="bold">ESPACIO INTERMEMBRANOSO (Lado P: Positivo)</text>
+              <text x="30" y="55" fill="#bae6fd" font-size="10">Potencial de membrana positivo ($\Psi \approx +180\,\text{mV}$)</text>
+
+              <!-- Membrana Interna (Bicapa Lipídica Impermeable) -->
+              <rect x="10" y="80" width="520" height="90" fill="#334155" rx="4"/>
+              <!-- Fosfolípidos representativos -->
+              <g fill="#f97316" stroke="#fb923c">
+                <circle cx="50" cy="90" r="6"/><line x1="50" y1="96" x2="50" y2="115" stroke-width="2"/>
+                <circle cx="75" cy="90" r="6"/><line x1="75" y1="96" x2="75" y2="115" stroke-width="2"/>
+                <circle cx="100" cy="90" r="6"/><line x1="100" y1="96" x2="100" y2="115" stroke-width="2"/>
+                <circle cx="440" cy="90" r="6"/><line x1="440" y1="96" x2="440" y2="115" stroke-width="2"/>
+                <circle cx="465" cy="90" r="6"/><line x1="465" y1="96" x2="465" y2="115" stroke-width="2"/>
+                <circle cx="490" cy="90" r="6"/><line x1="490" y1="96" x2="490" y2="115" stroke-width="2"/>
+              </g>
+
+              <!-- Transportador Proteico ANT (Canal Translocasa) -->
+              <rect x="200" y="75" width="140" height="100" rx="14" fill="#1e3a8a" stroke="#60a5fa" stroke-width="3"/>
+              <text x="270" y="125" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="extrabold">ANT</text>
+              <text x="270" y="140" text-anchor="middle" fill="#93c5fd" font-size="9">ADP/ATP Translocasa</text>
+
+              <!-- Matriz Mitocondrial -->
+              <rect x="10" y="180" width="520" height="90" fill="#1e1b4b" rx="8"/>
+              <text x="30" y="210" fill="#c7d2fe" font-size="12" font-weight="bold">MATRIZ MITOCONDRIAL (Lado N: Negativo)</text>
+              <text x="30" y="230" fill="#a5b4fc" font-size="10">Lugar de síntesis activa por $\text{ATP}$ Sintasa</text>
+
+              <!-- Flecha de salida de ATP4- (impulsada por potencial de membrana) -->
+              <path d="M 230,220 L 230,50" stroke="#f43f5e" stroke-width="4" stroke-dasharray="6,4" fill="none" marker-end="url(#arrow)"/>
+              <circle cx="230" cy="65" r="14" fill="#e11d48"/>
+              <text x="230" y="69" text-anchor="middle" fill="#ffffff" font-size="9" font-weight="bold">$\text{ATP}^{4-}$</text>
+
+              <!-- Flecha de entrada de ADP3- -->
+              <path d="M 310,50 L 310,220" stroke="#38bdf8" stroke-width="4" stroke-dasharray="6,4" fill="none"/>
+              <circle cx="310" cy="205" r="14" fill="#0284c7"/>
+              <text x="310" y="209" text-anchor="middle" fill="#ffffff" font-size="9" font-weight="bold">$\text{ADP}^{3-}$</text>
+
+              <!-- Indicadores de Carga Neta -->
+              <text x="140" y="130" fill="#f43f5e" font-size="10" font-weight="bold">-1 Carga Neta Saliente</text>
+            </svg>
+
+            <div class="mt-3 text-xs text-slate-300 font-mono text-center">
+              Fuerza impulsora: El potencial eléctrico negativo de la matriz ($\Delta \psi$) expulsa favorablemente al $\text{ATP}^{4-}$ (más negativo) frente al $\text{ADP}^{3-}$.
+            </div>
+
+          </div>
+
+          <!-- Detalles Bioquímicos Médicos -->
+          <div class="lg:col-span-5 space-y-4">
+            <div class="bg-blue-50/70 p-4 rounded-xl border border-blue-200">
+              <h4 class="text-sm font-bold text-blue-950 mb-2">Acoplamiento Electroquímico Estricto</h4>
+              <p class="text-xs text-slate-700 leading-relaxed">
+                Por cada intercambio de $\text{ATP}^{4-}$ por $\text{ADP}^{3-}$, <strong>se transloca 1 carga negativa neta hacia el exterior</strong>. Por consiguiente, la translocación consume aproximadamente el 25% de la energía del gradiente electroquímico de protones generado por la cadena respiratoria.
+              </p>
+            </div>
+
+            <div class="bg-amber-50 p-4 rounded-xl border border-amber-200">
+              <h4 class="text-sm font-bold text-amber-950 mb-1">Inhibidores Farmacológicos Clásicos</h4>
+              <p class="text-xs text-amber-900 leading-relaxed">
+                El <strong>atractilósido</strong> (toxina vegetal) bloquea el transportador ANT en su conformación orientada al exterior, y el <strong>ácido bongkrékico</strong> lo bloquea desde la matriz. Ambos detienen de inmediato la fosforilación oxidativa al impedir que el $\text{ADP}$ entre a la matriz.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- ========================================================================= -->
+    <!-- MÓDULO 4: CADENA DE TRANSPORTE DE ELECTRONES Y GRADIENTE -->
+    <!-- ========================================================================= -->
+    <section id="mod4" class="module-pane space-y-8 hidden">
+      
+      <!-- Banner Introductorio -->
+      <div class="bg-gradient-to-r from-blue-900 via-sky-900 to-slate-900 rounded-2xl p-6 sm:p-8 text-white shadow-xl">
+        <div class="max-w-3xl">
+          <div class="inline-block px-3 py-1 bg-sky-500/30 border border-sky-400/40 rounded-full text-sky-200 text-xs font-semibold uppercase tracking-wider mb-3">
+            Módulo Didáctico 4 • Biofísica de la Respiración Celular
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-2 tracking-tight">Cadena de Transporte de Electrones y Gradiente Quimiosmótico</h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            La célula evita una combustión incontrolada fraccionando la liberación de energía libre en transferencias redox escalonadas desde coenzimas reducidas ($\text{NADH}, \text{FADH}_2$) hasta el $\text{O}_2$, bombeando $\text{H}^+$ hacia el espacio intermembranoso.
+          </p>
+        </div>
+      </div>
+
+      <!-- Cuadro Termodinámico de las Caídas Energéticas -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <h3 class="text-lg font-bold text-slate-900 mb-2">Cuantificación Bioenergética: Los Tres Saltos Termodinámicos de la CTE</h3>
+        <p class="text-xs text-slate-600 mb-4 leading-relaxed">
+          Para sintetizar $1\,\text{mol}$ de $\text{ATP}$ a partir de $\text{ADP} + \text{P}_i$, se requiere una inversión de $\Delta G^{\circ\prime} \ge +7.3\,\text{kcal/mol}$. Por lo tanto, <strong>solo aquellos pasos redox donde la caída de energía libre sea más negativa que $-7.3\,\text{kcal/mol}$</strong> pueden acoplarse al bombeo efectivo de protones para sintetizar un $\text{ATP}$:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          
+          <div class="p-4 rounded-xl border border-blue-200 bg-blue-50/50">
+            <div class="flex justify-between items-center mb-1">
+              <span class="text-xs font-bold uppercase text-blue-700">Paso 1 • Complejo I</span>
+              <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-blue-200 text-blue-900">Suficiente</span>
+            </div>
+            <div class="text-sm font-semibold text-slate-800">$\text{NADH} \to \text{CoQ}$</div>
+            <div class="text-xl font-extrabold text-blue-700 font-mono my-1">$\Delta G = -12.2\,\text{kcal/mol}$</div>
+            <div class="text-xs text-slate-600">Supera holgadamente el umbral de $-7.3\,\text{kcal/mol}$. Bombea $4\,\text{H}^+$.</div>
+          </div>
+
+          <div class="p-4 rounded-xl border border-indigo-200 bg-indigo-50/50">
+            <div class="flex justify-between items-center mb-1">
+              <span class="text-xs font-bold uppercase text-indigo-700">Paso 2 • Complejo III</span>
+              <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-indigo-200 text-indigo-900">Suficiente</span>
+            </div>
+            <div class="text-sm font-semibold text-slate-800">$\text{Cit } b \to \text{Cit } c_1$</div>
+            <div class="text-xl font-extrabold text-indigo-700 font-mono my-1">$\Delta G = -9.9\,\text{kcal/mol}$</div>
+            <div class="text-xs text-slate-600">Ciclo Q acoplado. Bombea $4\,\text{H}^+$ al espacio intermembrana.</div>
+          </div>
+
+          <div class="p-4 rounded-xl border border-rose-200 bg-rose-50/50">
+            <div class="flex justify-between items-center mb-1">
+              <span class="text-xs font-bold uppercase text-rose-700">Paso 3 • Complejo IV</span>
+              <span class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-rose-200 text-rose-900">Suficiente</span>
+            </div>
+            <div class="text-sm font-semibold text-slate-800">$\text{Cit } c \to \text{O}_2$</div>
+            <div class="text-xl font-extrabold text-rose-700 font-mono my-1">$\Delta G = -23.8\,\text{kcal/mol}$</div>
+            <div class="text-xs text-slate-600">Salto gigantesco que reduce tetraelectrónicamente al $\text{O}_2$. Bombea $2\,\text{H}^+$.</div>
+          </div>
+
+        </div>
+
+        <div class="mt-4 p-3 bg-slate-100 rounded-xl text-xs text-slate-700 flex items-center justify-between">
+          <span><strong>Rendimiento Teórico Clásico Derivado:</strong></span>
+          <span class="font-mono font-bold text-slate-900">$1\,\text{NADH} \implies 3\,\text{ATP}$ sintetizados (modernamente $2.5\,\text{ATP}$ netos según coeficiente estequiométrico $\text{P/O}$).</span>
+        </div>
+      </div>
+
+      <!-- SIMULADOR DINÁMICO DE LA CADENA DE TRANSPORTE EN CANVAS/SVG -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-6">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-sky-600 bg-sky-50 px-2.5 py-1 rounded-md">Simulador de Translocación Protónica</span>
+            <h3 class="text-xl font-bold text-slate-900 mt-1">Corte Transversal de Cresta Mitocondrial</h3>
+            <p class="text-slate-500 text-xs sm:text-sm">Observe el flujo secuencial de electrones a través de los complejos I, III y IV, la reducción del oxígeno terminal y el motor rotatorio de la $\text{ATP}$ sintasa.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="btn-run-etc" onclick="toggleEtcAnimation()" class="px-4 py-2 rounded-xl text-xs font-bold bg-sky-600 hover:bg-sky-700 text-white shadow-md transition flex items-center gap-1.5">
+              <span id="etc-status-icon">▶</span>
+              <span id="etc-btn-text">Pausar/Reanudar Flujo</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Canvas Interactivo CTE -->
+        <div class="bg-slate-950 rounded-2xl p-4 overflow-hidden shadow-inner flex flex-col items-center">
+          <canvas id="etcCanvas" width="900" height="380" class="w-full h-auto max-h-[420px] block"></canvas>
+          
+          <div class="w-full grid grid-cols-2 md:grid-cols-4 gap-2 pt-3 text-[11px] text-slate-400 border-t border-slate-800">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-cyan-400 inline-block"></span>
+              <span><strong>Protones ($\text{H}^+$):</strong> Gradiente electroquímico</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span>
+              <span><strong>Electrones ($e^-$):</strong> Tráfico redox</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+              <span><strong>Aceptor Terminal:</strong> $\text{O}_2 \to 2\,\text{H}_2\text{O}$</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span>
+              <span><strong>ATP Sintasa:</strong> Quimiosmosis rotacional</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coenzimas y Citocromos: Distinción Indispensable -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
+            <h4 class="font-bold text-slate-800 text-sm mb-1">1. Transportadores de Hidrógeno ($\text{H}^+ + e^-$)</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              <strong>$\text{NAD}^+$ (de niacina/$\text{B}_3$)</strong>, <strong>$\text{FAD}$ (de riboflavina/$\text{B}_2$)</strong> y <strong>Coenzima $\text{Q}$ (ubiquinona)</strong>. Transportan protones junto con electrones tomados de sustratos orgánicos. La ubiquinona se mueve libremente en la fase hidrofóbica de la membrana conectando los Complejos I y II con el III.
+            </p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
+            <h4 class="font-bold text-slate-800 text-sm mb-1">2. Citocromos: Transportadores Puros de Electrones</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Hemoproteínas con un átomo central de hierro que conmuta su valencia:
+              <span class="font-mono font-bold text-slate-800 block my-1 text-center">$$\text{Fe}^{3+} + e^- \rightleftharpoons \text{Fe}^{2+}$$</span>
+              <strong>No transportan protones.</strong> Esta separación física de cargas es la condición indispensable para expulsar protones vectorialmente hacia el espacio intermembrana sin neutralizarlos.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================================================================= -->
+    <!-- MÓDULO 5: FISIOPATOLOGÍA COMPARADA (ISQUEMIA, CIANURO, DESACOPLADOR) -->
+    <!-- ========================================================================= -->
+    <section id="mod5" class="module-pane space-y-8 hidden">
+      
+      <!-- Banner Introductorio -->
+      <div class="bg-gradient-to-r from-red-950 via-slate-900 to-amber-950 rounded-2xl p-6 sm:p-8 text-white shadow-xl">
+        <div class="max-w-3xl">
+          <div class="inline-block px-3 py-1 bg-rose-500/30 border border-rose-400/40 rounded-full text-rose-200 text-xs font-semibold uppercase tracking-wider mb-3">
+            Módulo Didáctico 5 • Fisiopatología Molecular & Toxicología
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-2 tracking-tight">Triada de Fisiopatología Bioenergética Comparada</h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            Las catástrofes metabólicas agudas se originan en puntos de control específicos del transporte electrónico. Compare en vivo las tres disfunciones críticas: Infarto Agudo de Miocardio (IAM), Intoxicación por Cianuro y Desacoplamiento Fisiológico por Termogenina (UCP-1).
+          </p>
+        </div>
+      </div>
+
+      <!-- Selector de Escenario Patológico -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <div class="flex flex-wrap gap-3 mb-6" id="pathology-selector">
+          <button onclick="selectPathology('normal')" class="path-btn px-4 py-2.5 rounded-xl text-xs font-bold transition-all border border-blue-600 bg-blue-50 text-blue-800" data-path="normal">
+            ✅ 1. Estado Fisiológico Normal
+          </button>
+          <button onclick="selectPathology('ischemia')" class="path-btn px-4 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-200 text-slate-700 hover:bg-slate-50" data-path="ischemia">
+            🫀 2. Isquemia / Anoxia (Infarto de Miocardio)
+          </button>
+          <button onclick="selectPathology('cyanide')" class="path-btn px-4 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-200 text-slate-700 hover:bg-slate-50" data-path="cyanide">
+            ☠️ 3. Asfixia Histotóxica (Cianuro / Monóxido)
+          </button>
+          <button onclick="selectPathology('ucp1')" class="path-btn px-4 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-200 text-slate-700 hover:bg-slate-50" data-path="ucp1">
+            🔥 4. Desacoplador UCP-1 (Grasa Parda Neonatal)
+          </button>
+        </div>
+
+        <!-- Tablero Comparativo Dinámico -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+          
+          <!-- Monitor Gráfico de Estado -->
+          <div class="lg:col-span-7 bg-slate-900 rounded-2xl p-6 text-white flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+                <span id="path-title" class="text-base font-bold text-blue-400">Estado Fisiológico Normal</span>
+                <span id="path-badge" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-blue-900 text-blue-200">Homeostasis</span>
+              </div>
+              
+              <div class="space-y-4">
+                <!-- Medidores visuales de barra -->
+                <div>
+                  <div class="flex justify-between text-xs mb-1">
+                    <span class="text-slate-300">Suministro de Oxígeno ($\text{O}_2$ celular):</span>
+                    <span id="gauge-o2-val" class="font-mono font-bold text-cyan-400">100%</span>
+                  </div>
+                  <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                    <div id="gauge-o2-bar" class="bg-cyan-500 h-full rounded-full transition-all duration-500" style="width: 100%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-xs mb-1">
+                    <span class="text-slate-300">Gradiente de Protones ($\Delta \mu_{\text{H}^+}$):</span>
+                    <span id="gauge-grad-val" class="font-mono font-bold text-amber-400">180 mV (Máximo)</span>
+                  </div>
+                  <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                    <div id="gauge-grad-bar" class="bg-amber-500 h-full rounded-full transition-all duration-500" style="width: 100%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-xs mb-1">
+                    <span class="text-slate-300">Producción Neta de ATP:</span>
+                    <span id="gauge-atp-val" class="font-mono font-bold text-emerald-400">100% (Normal)</span>
+                  </div>
+                  <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                    <div id="gauge-atp-bar" class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: 100%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-xs mb-1">
+                    <span class="text-slate-300">Disipación de Energía como Calor Térmico:</span>
+                    <span id="gauge-heat-val" class="font-mono font-bold text-rose-400">Basal</span>
+                  </div>
+                  <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                    <div id="gauge-heat-bar" class="bg-rose-500 h-full rounded-full transition-all duration-500" style="width: 20%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mecanismo Molecular Específico del Estado -->
+            <div id="path-desc-box" class="mt-6 p-4 rounded-xl bg-slate-800/80 border border-slate-700 text-xs text-slate-300 leading-relaxed">
+              Los electrones fluyen con fluidez a través de los complejos I a IV gracias al aceptor terminal $\text{O}_2$. El gradiente de protones generado alimenta a la $\text{ATP}$ sintasa para sostener las demandas energéticas de la célula.
+            </div>
+
+          </div>
+
+          <!-- Cuadro Clínico de Razonamiento -->
+          <div class="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-5 flex flex-col justify-between">
+            <div>
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Análisis Fisiopatológico Detallado</h4>
+              <div id="path-clinical-details" class="space-y-3 text-xs text-slate-700 leading-relaxed">
+                <p><strong>Causa Primaria:</strong> Flujo sostenido de sustratos y oxígeno normóxico en sangre arterial.</p>
+                <p><strong>Estado de los Transportadores:</strong> Equilibrio dinámico normal entre formas oxidadas y reducidas ($\text{NADH}/\text{NAD}^+$ bajo control de demanda celular).</p>
+                <p><strong>Impacto Tisular:</strong> Mantenimiento perfecto del potencial de reposo celular, bombeo de calcio al retículo sarcoplásmico y contracción viable.</p>
+              </div>
+            </div>
+
+            <div id="path-clinical-alert" class="mt-4 p-3 rounded-xl bg-blue-100 text-blue-900 border border-blue-200 text-xs">
+              <strong>Correlación de Ingreso UCCuyo:</strong> La fosforilación oxidativa depende de la integridad estructural de la membrana mitocondrial interna y la disponibilidad de oxígeno.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- ========================================================================= -->
+    <!-- MÓDULO 6: INTEGRACIÓN METABÓLICA Y TALLER DE CASOS CLÍNICOS -->
+    <!-- ========================================================================= -->
+    <section id="mod6" class="module-pane space-y-8 hidden">
+      
+      <!-- Banner Introductorio -->
+      <div class="bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 rounded-2xl p-6 sm:p-8 text-white shadow-xl">
+        <div class="max-w-3xl">
+          <div class="inline-block px-3 py-1 bg-teal-500/30 border border-teal-400/40 rounded-full text-teal-200 text-xs font-semibold uppercase tracking-wider mb-3">
+            Módulo Didáctico 6 • Taller de Aplicación Clínica & Integración
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-2 tracking-tight">Mapa Metabólico Integrado y Razonamiento Clínico</h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            Integre la ruta completa desde la entrada de sustratos por la membrana plasmática hasta la contracción muscular activa, resolviendo desafíos clínicos reales propuestos por la cátedra.
+          </p>
+        </div>
+      </div>
+
+      <!-- Mapa de Flujo Intercompartimental Secuencial -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+        <div class="border-b border-slate-100 pb-4 mb-6">
+          <span class="text-xs font-bold uppercase tracking-wider text-teal-600 bg-teal-50 px-2.5 py-1 rounded-md">Tráfico Macromolecular</span>
+          <h3 class="text-xl font-bold text-slate-900 mt-1">De la Glucosa al Trabajo Muscular: El Circuito Completo</h3>
+          <p class="text-slate-500 text-xs sm:text-sm">Haga clic en cada estación del circuito para visualizar su función y localización anatómica exacta.</p>
+        </div>
+
+        <!-- Timeline / Flow Interactivo -->
+        <div class="grid grid-cols-1 md:grid-cols-6 gap-3 mb-6">
+          
+          <button onclick="showFlowStep(1)" id="flow-btn-1" class="flow-step-btn text-left p-3.5 rounded-xl border border-teal-600 bg-teal-50 text-teal-900 transition hover:shadow-sm">
+            <span class="text-[10px] font-mono font-bold text-teal-600 block mb-1">PASO 1 • CITOSOL</span>
+            <div class="font-bold text-xs">Glicólisis</div>
+            <div class="text-[10px] text-slate-500 mt-1">Glucosa $\to$ 2 Piruvato + 2 $\text{NADH}$</div>
+          </button>
+
+          <button onclick="showFlowStep(2)" id="flow-btn-2" class="flow-step-btn text-left p-3.5 rounded-xl border border-slate-200 bg-white text-slate-700 transition hover:shadow-sm">
+            <span class="text-[10px] font-mono font-bold text-slate-400 block mb-1">PASO 2 • MATRIZ</span>
+            <div class="font-bold text-xs">Piruvato DH</div>
+            <div class="text-[10px] text-slate-500 mt-1">Acetil-CoA + $\text{CO}_2$ + $\text{NADH}$</div>
+          </button>
+
+          <button onclick="showFlowStep(3)" id="flow-btn-3" class="flow-step-btn text-left p-3.5 rounded-xl border border-slate-200 bg-white text-slate-700 transition hover:shadow-sm">
+            <span class="text-[10px] font-mono font-bold text-slate-400 block mb-1">PASO 3 • MATRIZ</span>
+            <div class="font-bold text-xs">Ciclo de Krebs</div>
+            <div class="text-[10px] text-slate-500 mt-1">Carga de $\text{NADH}$ y $\text{FADH}_2$</div>
+          </button>
+
+          <button onclick="showFlowStep(4)" id="flow-btn-4" class="flow-step-btn text-left p-3.5 rounded-xl border border-slate-200 bg-white text-slate-700 transition hover:shadow-sm">
+            <span class="text-[10px] font-mono font-bold text-slate-400 block mb-1">PASO 4 • CRESTAS</span>
+            <div class="font-bold text-xs">Cadena Respiratoria</div>
+            <div class="text-[10px] text-slate-500 mt-1">Bombeo de protones a espacio IMS</div>
+          </button>
+
+          <button onclick="showFlowStep(5)" id="flow-btn-5" class="flow-step-btn text-left p-3.5 rounded-xl border border-slate-200 bg-white text-slate-700 transition hover:shadow-sm">
+            <span class="text-[10px] font-mono font-bold text-slate-400 block mb-1">PASO 5 • SINTASA</span>
+            <div class="font-bold text-xs">Quimiosmosis</div>
+            <div class="text-[10px] text-slate-500 mt-1">Retorno de $\text{H}^+ \to \text{ATP}$ matriz</div>
+          </button>
+
+          <button onclick="showFlowStep(6)" id="flow-btn-6" class="flow-step-btn text-left p-3.5 rounded-xl border border-slate-200 bg-white text-slate-700 transition hover:shadow-sm">
+            <span class="text-[10px] font-mono font-bold text-slate-400 block mb-1">PASO 6 • CITOSOL</span>
+            <div class="font-bold text-xs">ANT y Consumo</div>
+            <div class="text-[10px] text-slate-500 mt-1">Exportación y contracción/bombas</div>
+          </button>
+
+        </div>
+
+        <!-- Detalle del Paso Seleccionado -->
+        <div id="flow-detail-box" class="bg-slate-50 border border-slate-200 rounded-xl p-5 text-xs text-slate-700 leading-relaxed">
+          <!-- Inyectado por JS -->
+        </div>
+
+      </div>
+
+      
+    </section>
+
+  </main>
+
+    </div>
+  </main>
+
+  <!-- ==================== PIE DE PÁGINA INSTITUCIONAL ==================== -->
+  <footer class="bg-white border-t border-gray-200 py-3 text-center text-xs text-gray-500 font-medium">
+    Desarrollado por vesalio - Todos los derechos reservados
+  </footer>
+
+  <!-- ==================== MODAL: VADEMÉCUM BIOQUÍMICO Y BIOENERGÉTICO ==================== -->
+  <div id="modal-formulas" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white max-w-3xl w-full rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="bg-accent p-4 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-book-bookmark text-xl"></i>
+          <h3 class="font-bold text-base">Vademécum Bioquímico: Bioenergética y Dinámica Celular</h3>
+        </div>
+        <button onclick="closeFormulasModal()" class="text-white hover:text-gray-200 transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      
+      <div class="p-6 overflow-y-auto space-y-6 text-xs md:text-sm text-gray-700 custom-scrollbar leading-relaxed">
+        
+        <!-- 1. Termodinámica de Gibbs -->
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-bolt"></i> 1. Ecuación de Energía Libre de Gibbs (T y P constantes)
+          </h4>
+          <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-3 text-xs">
+            <div class="bg-emerald-50 text-emerald-900 p-3.5 rounded-xl border border-emerald-200 space-y-2">
+              <div class="flex items-center justify-between">
+                <strong class="font-bold text-emerald-950 text-xs sm:text-sm">• Criterio de Espontaneidad Termodinámica:</strong>
+                <span class="text-[10px] font-mono bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded-full font-bold">Segunda Ley</span>
+              </div>
+              <div class="overflow-x-auto py-2 custom-scroll text-center">
+                <div class="inline-block min-w-full text-xs font-mono font-semibold text-emerald-950 px-2 py-1 bg-white/70 rounded-lg border border-emerald-100">
+                  $$\Delta G = \Delta H - T\Delta S$$
+                </div>
+              </div>
+              <p class="text-[11px] text-emerald-800 leading-relaxed">
+                Si $\Delta G < 0$, la reacción es <strong>exergónica y termodinámicamente espontánea</strong> (libera energía útil de trabajo). Si $\Delta G > 0$, es <strong>endergónica</strong> y no ocurrirá sin acoplamiento metabólico.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Hidrólisis y Acoplamiento del ATP -->
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-battery-three-quarters"></i> 2. Hidrólisis de Enlaces Fosfoanhídrido del ATP
+          </h4>
+          <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-3 text-xs">
+            <div class="bg-rose-50 text-rose-900 p-3.5 rounded-xl border border-rose-200 space-y-2">
+              <div class="flex items-center justify-between">
+                <strong class="font-bold text-rose-950 text-xs sm:text-sm">• Rotura del Fosfato Terminal ($\gamma$):</strong>
+                <span class="text-[10px] font-mono bg-rose-200 text-rose-900 px-2 py-0.5 rounded-full font-bold">Moneda Celular</span>
+              </div>
+              <div class="overflow-x-auto py-2 custom-scroll text-center">
+                <div class="inline-block min-w-full text-xs font-mono font-semibold text-rose-950 px-2 py-1 bg-white/70 rounded-lg border border-rose-100">
+                  $$\text{ATP}^{4-} + \text{H}_2\text{O} \rightleftharpoons \text{ADP}^{3-} + \text{P}_i^{2-} + \text{H}^+ \quad (\Delta G^{\circ\prime} = -7.3\,\text{kcal/mol} \approx -30.5\,\text{kJ/mol})$$
+                </div>
+              </div>
+              <p class="text-[11px] text-rose-800 leading-relaxed">
+                El gran rendimiento exergónico se debe al <em>alivio de repulsión electrostática</em> entre las 4 cargas negativas a pH 7.4 y la <em>estabilización por resonancia</em> del ion ortofosfato libre ($\text{P}_i$).
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Rendimiento Bioenergético de la Cadena Respiratoria -->
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-atom"></i> 3. Estequiometría de la Fosforilación Oxidativa (Fuerza Protón-Motriz)
+          </h4>
+          <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-2 text-xs">
+            <div class="p-2.5 bg-white rounded-lg border border-gray-200 space-y-1">
+              <span class="font-bold text-gray-900 block">• Balance de Transferencia de Electrones y Bombeo de Protones:</span>
+              <div class="overflow-x-auto py-1 text-center">
+                $$\text{NADH} + \text{H}^+ + \frac{1}{2}\text{O}_2 + 3\,\text{ADP} + 3\,\text{P}_i \longrightarrow \text{NAD}^+ + \text{H}_2\text{O} + 3\,\text{ATP}$$
+              </div>
+              <div class="overflow-x-auto py-1 text-center">
+                $$\text{FADH}_2 + \frac{1}{2}\text{O}_2 + 2\,\text{ADP} + 2\,\text{P}_i \longrightarrow \text{FAD} + \text{H}_2\text{O} + 2\,\text{ATP}$$
+              </div>
+              <p class="text-[11px] text-gray-500">
+                El flujo de $2\,\text{e}^-$ desde el $\text{NADH}$ impulsa el bombeo de $10\,\text{H}^+$ a través de los Complejos I, III y IV al espacio intermembrana, creando la fuerza protón-motriz ($\Delta p = \Delta \psi - 60\Delta\text{pH}$).
+              </p>
+            </div>
+
+            <div class="p-2.5 bg-white rounded-lg border border-gray-200 space-y-1">
+              <span class="font-bold text-gray-900 block">• Translocasa ANT (Antiporte Electrogénico):</span>
+              <div class="overflow-x-auto py-1 text-center">
+                $$\text{ADP}^{3-}_{\text{citosol}} + \text{ATP}^{4-}_{\text{matriz}} \xrightarrow{\text{ANT / }\Delta\Psi} \text{ADP}^{3-}_{\text{matriz}} + \text{ATP}^{4-}_{\text{citosol}}$$
+              </div>
+              <p class="text-[11px] text-gray-500">Impulsado por el gradiente de potencial de membrana mitocondrial negativo en la cara matricial.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bg-gray-50 p-4 border-t border-gray-200 flex justify-end">
+        <button onclick="closeFormulasModal()" class="px-5 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover text-xs transition shadow-sm">
+          Entendido
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: GUÍA DE USO INTERACTIVA ==================== -->
+  <div id="modal-tutorial" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white max-w-4xl w-full rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="bg-accent p-4 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-circle-question text-xl"></i>
+          <h3 class="font-bold text-base">Guía de Uso: Plataforma de Bioenergética y Metabolismo Molecular</h3>
+        </div>
+        <button onclick="closeTutorial()" class="text-white hover:text-gray-200 transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      
+      <div class="p-6 overflow-y-auto space-y-6 text-xs md:text-sm text-gray-700 custom-scrollbar leading-relaxed">
+        
+        <!-- 1. Navegación -->
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-1 flex items-center gap-2">
+            <i class="fa-solid fa-compass"></i> 1. Navegación Modular Lateral
+          </h4>
+          <p class="text-gray-600">
+            Utiliza la barra lateral izquierda persistente para alternar fluidamente entre los 6 módulos temáticos orientados al ingreso a Medicina (UCCuyo).
+          </p>
+        </div>
+
+        <!-- 2. Módulos Temáticos -->
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-sliders"></i> 2. Módulos Temáticos y Herramientas Interactivas
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-1.5">
+              <div class="flex items-center gap-1.5 font-bold text-gray-800">
+                <i class="fa-solid fa-bolt text-accent"></i> 1. Gibbs & Metabolismo
+              </div>
+              <p class="text-gray-600 text-[11px]">
+                • Alterna entre reacciones exergónicas ($\Delta G < 0$) y endergónicas ($\Delta G > 0$).<br>
+                • Activa/desactiva la catálisis enzimática en el Canvas 2D para comprobar que la enzima disminuye la energía de activación ($E_a$) sin modificar el $\Delta G$.
+              </p>
+            </div>
+
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-1.5">
+              <div class="flex items-center gap-1.5 font-bold text-gray-800">
+                <i class="fa-solid fa-battery-three-quarters text-accent"></i> 2. Dinámica del ATP & Rigor Mortis
+              </div>
+              <p class="text-gray-600 text-[11px]">
+                • Acciona el botón de hidrólisis para visualizar la rotura del resorte electrostático del fosfato gamma.<br>
+                • Simula el fenómeno forense del rigor mortis comprobando que la miosina requiere ATP para disociarse de la actina y que la relajación muscular es activa.
+              </p>
+            </div>
+
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-1.5">
+              <div class="flex items-center gap-1.5 font-bold text-gray-800">
+                <i class="fa-solid fa-arrows-split-up-and-left text-accent"></i> 3. Mitocondria & Antiporte ANT
+              </div>
+              <p class="text-gray-600 text-[11px]">
+                • Inspecciona la permeabilidad de la membrana externa (porinas) frente a la impermeabilidad selectiva de la membrana interna.<br>
+                • Analiza el ciclo conformacional de la translocasa $\text{ADP}^{3-}/\text{ATP}^{4-}$ impulsada por $\Delta\Psi$.
+              </p>
+            </div>
+
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-1.5">
+              <div class="flex items-center gap-1.5 font-bold text-gray-800">
+                <i class="fa-solid fa-atom text-accent"></i> 4. Cadena Respiratoria en Tiempo Real
+              </div>
+              <p class="text-gray-600 text-[11px]">
+                • Visualiza el flujo de electrones a través de los Complejos I al IV y el bombeo de protones en un Canvas interactivo.<br>
+                • Regula el slider de tasa de $\text{NADH}$ y observa la rotación de la $\text{ATP}$ sintasa generando $3\,\text{ATP}$ por cada par de electrones.
+              </p>
+            </div>
+
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-1.5">
+              <div class="flex items-center gap-1.5 font-bold text-gray-800">
+                <i class="fa-solid fa-heart-pulse text-accent"></i> 5. Fisiopatología & Estados de Shock
+              </div>
+              <p class="text-gray-600 text-[11px]">
+                • Evalúa el estado normal vs. isquemia miocárdica (falta de $\text{O}_2$), intoxicación por cianuro (bloqueo histotóxico del Complejo IV) y termogénesis fisiológica por desacoplador UCP-1 en grasa parda neonatal.<br>
+                • Monitorea en tiempo real los cuatro manómetros bioenergéticos: $\text{O}_2$, gradiente de $\text{H}^+$, $\text{ATP}$ y calor.
+              </p>
+            </div>
+
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-1.5">
+              <div class="flex items-center gap-1.5 font-bold text-gray-800">
+                <i class="fa-solid fa-network-wired text-accent"></i> 6. Flujo Integrado Paso a Paso
+              </div>
+              <p class="text-gray-600 text-[11px]">
+                • Recorre de forma interactiva las 6 estaciones del circuito bioenergético: desde la glucólisis citoplásmica hasta la exportación de ATP y el trabajo mecánico celular.
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bg-gray-50 p-4 border-t border-gray-200 flex justify-end">
+        <button onclick="closeTutorial()" class="px-5 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover text-xs transition shadow-sm">
+          Comenzar Experiencia
+        </button>
+      </div>
+    </div>
+  </div>
+
+<!-- SCRIPT DIDÁCTICO Y CONTROLADOR INTERACTIVO COMPLETO -->
+  <script>
+    // =========================================================================
+    // 0. GESTOR DE MATEMÁTICAS KATEX
+    // =========================================================================
+    function renderMathWhenReady() {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\[", right: "\\]", display: true },
+            { left: "$", right: "$", display: false },
+            { left: "\\(", right: "\\)", display: false }
+          ],
+          ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+          throwOnError: false
+        });
+      }
+    }
+
+    // ==========================================
+    // CONTROL DE MODALES SUPERIORES
+    // ==========================================
+    function openFormulasModal() {
+      const el = document.getElementById('modal-formulas');
+      el.classList.remove('hidden');
+      if (window.renderMathInElement) {
+        renderMathInElement(el, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\[", right: "\\]", display: true },
+            { left: "$", right: "$", display: false },
+            { left: "\\(", right: "\\)", display: false }
+          ],
+          throwOnError: false
+        });
+      }
+    }
+
+    function closeFormulasModal() {
+      document.getElementById('modal-formulas').classList.add('hidden');
+    }
+
+    function openTutorial() {
+      const el = document.getElementById('modal-tutorial');
+      el.classList.remove('hidden');
+      if (window.renderMathInElement) {
+        renderMathInElement(el, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\[", right: "\\]", display: true },
+            { left: "$", right: "$", display: false },
+            { left: "\\(", right: "\\)", display: false }
+          ],
+          throwOnError: false
+        });
+      }
+    }
+
+    function closeTutorial() {
+      document.getElementById('modal-tutorial').classList.add('hidden');
+    }
+
+    // =========================================================================
+    // 2. MÓDULO 1: SIMULADOR GIBBS (CANVAS 2D) - VARIABLES GLOBALES
+    // =========================================================================
+    let reactionType = 'exergonic'; // 'exergonic' | 'endergonic'
+    let enzymeActive = true;
+
+    // Navegación Modular Lateral en 2 Columnas
+    function switchTab(tabId) {
+      document.querySelectorAll('.module-pane').forEach(el => el.classList.add('hidden'));
+      const activePane = document.getElementById(tabId);
+      if (activePane) activePane.classList.remove('hidden');
+
+      // Botones Laterales
+      document.querySelectorAll('#navTabs .nav-btn').forEach(btn => {
+        btn.classList.remove('bg-accent', 'text-white', 'font-semibold', 'shadow-sm');
+        btn.classList.add('text-gray-700', 'hover:bg-gray-100', 'font-medium');
+      });
+      const currentNav = document.getElementById('tab-btn-' + tabId);
+      if (currentNav) {
+        currentNav.classList.add('bg-accent', 'text-white', 'font-semibold', 'shadow-sm');
+        currentNav.classList.remove('text-gray-700', 'hover:bg-gray-100', 'font-medium');
+      }
+
+      // Re-render de KaTeX en el nuevo panel
+      setTimeout(renderMathWhenReady, 50);
+
+      // Iniciar o redibujar canvas si corresponde
+      if (tabId === 'mod1') drawGibbsGraph();
+      if (tabId === 'mod4') startEtcLoop();
+    }
+
+    function setReactionType(type) {
+      reactionType = type;
+      const btnEx = document.getElementById('btn-exergonic');
+      const btnEn = document.getElementById('btn-endergonic');
+      
+      if (type === 'exergonic') {
+        btnEx.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-emerald-600 text-white shadow-sm";
+        btnEn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-slate-100 text-slate-700 hover:bg-slate-200";
+      } else {
+        btnEn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow-sm";
+        btnEx.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-slate-100 text-slate-700 hover:bg-slate-200";
+      }
+      updateGibbsValues();
+      drawGibbsGraph();
+    }
+
+    function toggleEnzyme() {
+      enzymeActive = !enzymeActive;
+      const statusText = document.getElementById('enzyme-status-text');
+      const btn = document.getElementById('btn-enzyme');
+      if (enzymeActive) {
+        statusText.innerHTML = "⚡ Enzima: ACTIVADA";
+        btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all border border-indigo-400 bg-indigo-50 text-indigo-700";
+      } else {
+        statusText.innerHTML = "⚪ Enzima: INACTIVA";
+        btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all border border-slate-300 bg-slate-100 text-slate-600";
+      }
+      updateGibbsValues();
+      drawGibbsGraph();
+    }
+
+    function updateGibbsValues() {
+      const gReactEl = document.getElementById('val-g-react');
+      const gProdEl = document.getElementById('val-g-prod');
+      const deltaGEl = document.getElementById('val-delta-g');
+      const eaEl = document.getElementById('val-ea');
+
+      let gReact, gProd, ea;
+      if (reactionType === 'exergonic') {
+        gReact = 80.0;
+        gProd = 30.0;
+        ea = enzymeActive ? 18.0 : 55.0;
+        deltaGEl.innerText = "-50.0 kcal/mol";
+        deltaGEl.className = "font-mono font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded";
+      } else {
+        gReact = 25.0;
+        gProd = 75.0;
+        ea = enzymeActive ? 65.0 : 95.0;
+        deltaGEl.innerText = "+50.0 kcal/mol";
+        deltaGEl.className = "font-mono font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded";
+      }
+
+      gReactEl.innerText = gReact.toFixed(1) + " kcal/mol";
+      gProdEl.innerText = gProd.toFixed(1) + " kcal/mol";
+      eaEl.innerText = ea.toFixed(1) + " kcal/mol" + (enzymeActive ? " (Reducida)" : " (Alta barrera)");
+    }
+
+    function drawGibbsGraph() {
+      const canvas = document.getElementById('gibbsCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Cuadrícula médica sutil
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1;
+      for (let x = 40; x < w; x += 40) {
+        ctx.beginPath(); ctx.moveTo(x, 20); ctx.lineTo(x, h - 30); ctx.stroke();
+      }
+      for (let y = 30; y < h - 30; y += 30) {
+        ctx.beginPath(); ctx.moveTo(40, y); ctx.lineTo(w - 20, y); ctx.stroke();
+      }
+
+      // Ejes coordenados
+      ctx.strokeStyle = '#64748b';
+      ctx.lineWidth = 2;
+      // Eje Y (Energía Libre G)
+      ctx.beginPath(); ctx.moveTo(50, 20); ctx.lineTo(50, h - 30); ctx.stroke();
+      // Eje X (Avance de Reacción)
+      ctx.beginPath(); ctx.moveTo(50, h - 30); ctx.lineTo(w - 20, h - 30); ctx.stroke();
+
+      // Flechas y etiquetas de ejes
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '11px Inter, sans-serif';
+      ctx.fillText('Energía Libre (G)', 55, 30);
+      ctx.fillText('Coordenada de Reacción (Avance)', w - 190, h - 12);
+
+      // Puntos clave de curva
+      let startY, endY, peakNoEnzymeY, peakEnzymeY;
+      const startX = 70;
+      const peakX = w / 2;
+      const endX = w - 60;
+
+      if (reactionType === 'exergonic') {
+        startY = h * 0.45;
+        endY = h * 0.78;
+        peakNoEnzymeY = h * 0.12;
+        peakEnzymeY = h * 0.32;
+      } else {
+        startY = h * 0.78;
+        endY = h * 0.35;
+        peakNoEnzymeY = h * 0.10;
+        peakEnzymeY = h * 0.24;
+      }
+
+      // 1. Curva Sin Enzima (Línea punteada gris/roja)
+      ctx.beginPath();
+      ctx.setLineDash([5, 5]);
+      ctx.strokeStyle = '#f87171';
+      ctx.lineWidth = 2.5;
+      ctx.moveTo(startX, startY);
+      ctx.bezierCurveTo(startX + 90, startY, peakX - 90, peakNoEnzymeY, peakX, peakNoEnzymeY);
+      ctx.bezierCurveTo(peakX + 90, peakNoEnzymeY, endX - 90, endY, endX, endY);
+      ctx.stroke();
+
+      // 2. Curva Con Enzima (Línea continua cian si activa)
+      if (enzymeActive) {
+        ctx.beginPath();
+        ctx.setLineDash([]);
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 3.5;
+        ctx.moveTo(startX, startY);
+        ctx.bezierCurveTo(startX + 90, startY, peakX - 90, peakEnzymeY, peakX, peakEnzymeY);
+        ctx.bezierCurveTo(peakX + 90, peakEnzymeY, endX - 90, endY, endX, endY);
+        ctx.stroke();
+
+        // Relleno sutil bajo la curva catalizada
+        ctx.lineTo(endX, h - 30);
+        ctx.lineTo(startX, h - 30);
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.08)';
+        ctx.fill();
+      }
+
+      ctx.setLineDash([]); // Reset dash
+
+      // Puntos Reactivos y Productos
+      // Reactivos
+      ctx.fillStyle = '#38bdf8';
+      ctx.beginPath(); ctx.arc(startX, startY, 6, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('Reactivos (R)', startX - 20, startY - 12);
+
+      // Productos
+      ctx.fillStyle = reactionType === 'exergonic' ? '#34d399' : '#60a5fa';
+      ctx.beginPath(); ctx.arc(endX, endY, 6, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText('Productos (P)', endX - 30, endY - 12);
+
+      // Cota de Delta G (Flecha vertical entre nivel inicial y final)
+      ctx.strokeStyle = '#fbbf24';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(endX + 20, startY);
+      ctx.lineTo(endX + 20, endY);
+      ctx.stroke();
+      
+      // Flechita indicadora Delta G
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = 'bold 12px Inter';
+      const deltaGText = reactionType === 'exergonic' ? 'ΔG < 0 (Exergónico)' : 'ΔG > 0 (Endergónico)';
+      ctx.fillText(deltaGText, endX - 110, (startY + endY) / 2 + 4);
+
+      // Indicador de Ea
+      ctx.strokeStyle = enzymeActive ? '#38bdf8' : '#f87171';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([3, 3]);
+      const currentPeakY = enzymeActive ? peakEnzymeY : peakNoEnzymeY;
+      ctx.beginPath();
+      ctx.moveTo(peakX, currentPeakY);
+      ctx.lineTo(peakX, startY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = enzymeActive ? '#38bdf8' : '#f87171';
+      ctx.font = '10px Inter';
+      ctx.fillText(enzymeActive ? 'Ea Catálitica (Baja)' : 'Ea Sin Enzima (Alta)', peakX - 50, currentPeakY - 8);
+    }
+
+    // =========================================================================
+    // 3. MÓDULO 2: ATP, TENSIÓN QUÍMICA & RIGOR MORTIS
+    // =========================================================================
+    let isHydrolyzed = false;
+
+    function triggerAtpHydrolysis() {
+      if (isHydrolyzed) return;
+      isHydrolyzed = true;
+
+      const gammaGroup = document.getElementById('group-gamma');
+      const spring2 = document.getElementById('spring2');
+      const repulsionArrows = document.getElementById('repulsion-arrows');
+      const banner = document.getElementById('atp-state-banner');
+
+      // Animación de separación del grupo gamma (desplazamiento a la derecha)
+      gammaGroup.setAttribute('transform', 'translate(620, 80)');
+      
+      // Rotura del resorte
+      spring2.setAttribute('opacity', '0.2');
+      repulsionArrows.setAttribute('opacity', '0');
+
+      banner.innerHTML = `<span class="text-rose-400 font-bold">¡Hidrólisis Completa!</span> • Se liberaron <strong class="text-white">-7.3 kcal/mol (-30.5 kJ/mol)</strong>. Alivio de repulsión y resonancia de $\\text{P}_i$.`;
+      renderMathWhenReady();
+    }
+
+    function resetAtpMolecule() {
+      isHydrolyzed = false;
+      const gammaGroup = document.getElementById('group-gamma');
+      const spring2 = document.getElementById('spring2');
+      const repulsionArrows = document.getElementById('repulsion-arrows');
+      const banner = document.getElementById('atp-state-banner');
+
+      gammaGroup.setAttribute('transform', 'translate(540, 80)');
+      spring2.setAttribute('opacity', '1');
+      repulsionArrows.setAttribute('opacity', '1');
+
+      banner.innerHTML = `Estado: <span class="text-amber-400 font-bold">$\\text{ATP}^{4-}$ Intacto</span> • Repulsión electrostática máxima en enlaces fosfoanhídrido`;
+      renderMathWhenReady();
+    }
+
+    // Simulador Rigor Mortis
+    let isRigorState = false;
+
+    function toggleRigorMortisSimulation() {
+      isRigorState = !isRigorState;
+
+      const btn = document.getElementById('btn-rigor-toggle');
+      const btnText = document.getElementById('rigor-btn-text');
+      const descBox = document.getElementById('rigor-step-description');
+      const myosinHead = document.getElementById('myosin-head');
+      const atpDot = document.getElementById('myosin-atp-binding');
+
+      if (isRigorState) {
+        // Estado post-mortem sin ATP: puente bloqueado a 45 grados adherido a la actina
+        btn.className = "px-4 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white transition flex items-center gap-2 shadow-lg";
+        btnText.innerHTML = "Restablecer ATP Vital (Reanimación)";
+        
+        // Cabeza de miosina inclinada firmemente contra actina
+        myosinHead.setAttribute('transform', 'translate(260, 150) rotate(-25)');
+        atpDot.setAttribute('opacity', '0'); // Desaparición total del ATP
+
+        descBox.innerHTML = `<strong class="text-rose-400 font-bold">ESTADO DE RIGOR MORTIS CADAVÉRICO:</strong> Depleción total de $\\text{ATP}$ citosólico. La cabeza de miosina permanece unida permanentemente a la actina sin poder desacoplarse. Rigidez cadavérica irreversible por falta de aporte energético.`;
+      } else {
+        // Estado fisiológico normal con recarga continua de ATP
+        btn.className = "px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-600 text-slate-900 transition flex items-center gap-2 shadow-lg";
+        btnText.innerHTML = "Simular Muerte Somática (Cese de ATP)";
+        
+        myosinHead.setAttribute('transform', 'translate(250, 160) rotate(0)');
+        atpDot.setAttribute('opacity', '1'); // ATP presente desacoplando
+
+        descBox.innerHTML = `<strong class="text-emerald-400 font-bold">Estado Fisiológico Normal:</strong> La unión de una nueva molécula de $\\text{ATP}$ disocia el complejo actina-miosina, permitiendo la relajación muscular.`;
+      }
+      renderMathWhenReady();
+    }
+
+    // =========================================================================
+    // 4. MÓDULO 4: CADENA RESPIRATORIA Y ATP SINTASA (CANVAS CONTINUO)
+    // =========================================================================
+    let etcRunning = true;
+    let etcFrameId = null;
+    let electrons = [];
+    let protons = [];
+    let atpSynthAngle = 0;
+
+    function initEtcParticles() {
+      electrons = [];
+      protons = [];
+      // Generar protones iniciales en el espacio intermembrana
+      for (let i = 0; i < 35; i++) {
+        protons.push({
+          x: 40 + Math.random() * 820,
+          y: 40 + Math.random() * 75,
+          vx: (Math.random() - 0.5) * 0.8,
+          vy: (Math.random() - 0.5) * 0.8
+        });
+      }
+      // Generar paquetes de electrones iniciales
+      for (let i = 0; i < 6; i++) {
+        electrons.push({
+          step: Math.random() * 4,
+          progress: Math.random()
+        });
+      }
+    }
+
+    function toggleEtcAnimation() {
+      etcRunning = !etcRunning;
+      const btnText = document.getElementById('etc-btn-text');
+      const icon = document.getElementById('etc-status-icon');
+      if (etcRunning) {
+        btnText.innerText = "Pausar Flujo";
+        icon.innerText = "⏸";
+        startEtcLoop();
+      } else {
+        btnText.innerText = "Reanudar Flujo";
+        icon.innerText = "▶";
+        if (etcFrameId) cancelAnimationFrame(etcFrameId);
+      }
+    }
+
+    function startEtcLoop() {
+      if (etcFrameId) cancelAnimationFrame(etcFrameId);
+      function loop() {
+        if (etcRunning) {
+          drawEtcSimulation();
+          etcFrameId = requestAnimationFrame(loop);
+        }
+      }
+      loop();
+    }
+
+    function drawEtcSimulation() {
+      const canvas = document.getElementById('etcCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Fondos de Compartimentos
+      // Espacio Intermembranoso (Arriba)
+      ctx.fillStyle = '#082f49';
+      ctx.fillRect(0, 0, w, 120);
+
+      // Membrana Interna (Zona Lipídica Central)
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(0, 120, w, 100);
+
+      // Matriz Mitocondrial (Abajo)
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 220, w, h - 220);
+
+      // Etiquetas de Compartimentos
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('ESPACIO INTERMEMBRANOSO (Alta concentración de H+)', 20, 25);
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px Inter';
+      ctx.fillText('MEMBRANA MITOCONDRIAL INTERNA (Impermeable)', 20, 135);
+
+      ctx.fillStyle = '#c7d2fe';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('MATRIZ MITOCONDRIAL (pH 7.8)', 20, 365);
+
+      // Complejos de la Cadena Respiratoria
+      // Complejo I (NADH DH)
+      ctx.fillStyle = '#1d4ed8';
+      ctx.beginPath();
+      ctx.roundRect(100, 90, 80, 140, 12);
+      ctx.fill();
+      ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 2; ctx.stroke();
+      ctx.fillStyle = '#ffffff'; ctx.font = 'bold 11px Inter'; ctx.textAlign = 'center';
+      ctx.fillText('Complejo I', 140, 155);
+      ctx.font = '9px Inter'; ctx.fillStyle = '#bfdbfe';
+      ctx.fillText('NADH DH', 140, 170);
+      ctx.fillText('4 H+ ↑', 140, 110);
+
+      // Coenzima Q (Móvil)
+      ctx.fillStyle = '#d97706';
+      ctx.beginPath();
+      ctx.arc(220, 170, 22, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#fde68a'; ctx.stroke();
+      ctx.fillStyle = '#ffffff'; ctx.font = 'bold 10px Inter';
+      ctx.fillText('CoQ', 220, 173);
+
+      // Complejo II (Succinato DH)
+      ctx.fillStyle = '#0284c7';
+      ctx.beginPath();
+      ctx.roundRect(200, 200, 70, 60, 8);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff'; ctx.font = 'bold 9px Inter';
+      ctx.fillText('C. II', 235, 230);
+      ctx.fillText('FADH2', 235, 245);
+
+      // Complejo III (Citocromo bc1)
+      ctx.fillStyle = '#4338ca';
+      ctx.beginPath();
+      ctx.roundRect(300, 95, 80, 130, 12);
+      ctx.fill();
+      ctx.strokeStyle = '#a5b4fc'; ctx.stroke();
+      ctx.fillStyle = '#ffffff'; ctx.font = 'bold 11px Inter';
+      ctx.fillText('Complejo III', 340, 155);
+      ctx.font = '9px Inter'; ctx.fillStyle = '#c7d2fe';
+      ctx.fillText('Cit bc1', 340, 170);
+      ctx.fillText('4 H+ ↑', 340, 110);
+
+      // Citocromo c (Periférico en espacio IMS)
+      ctx.fillStyle = '#b91c1c';
+      ctx.beginPath();
+      ctx.arc(420, 105, 20, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#fca5a5'; ctx.stroke();
+      ctx.fillStyle = '#ffffff'; ctx.font = 'bold 9px Inter';
+      ctx.fillText('Cit c', 420, 108);
+
+      // Complejo IV (Citocromo Oxidasa)
+      ctx.fillStyle = '#991b1b';
+      ctx.beginPath();
+      ctx.roundRect(470, 90, 85, 140, 12);
+      ctx.fill();
+      ctx.strokeStyle = '#f87171'; ctx.stroke();
+      ctx.fillStyle = '#ffffff'; ctx.font = 'bold 11px Inter';
+      ctx.fillText('Complejo IV', 512, 155);
+      ctx.font = '9px Inter'; ctx.fillStyle = '#fecaca';
+      ctx.fillText('Cit Oxidasa', 512, 170);
+      ctx.fillText('2 H+ ↑', 512, 110);
+      // Reacción de Oxígeno
+      ctx.fillStyle = '#fde047'; ctx.font = 'bold 9px monospace';
+      ctx.fillText('½ O2 + 2H+ → H2O', 512, 255);
+
+      // ATP Sintasa (Complejo V con rotor F0 y cabeza F1)
+      ctx.fillStyle = '#047857';
+      // Subunidad F0 transmembrana
+      ctx.beginPath();
+      ctx.roundRect(680, 105, 60, 65, 8);
+      ctx.fill();
+      ctx.strokeStyle = '#6ee7b7'; ctx.stroke();
+      
+      // Canal protónico F0
+      ctx.fillStyle = '#065f46';
+      ctx.fillRect(702, 70, 16, 40);
+
+      // Tallo rotor gamma
+      ctx.strokeStyle = '#34d399'; ctx.lineWidth = 6;
+      ctx.beginPath(); ctx.moveTo(710, 170); ctx.lineTo(710, 220); ctx.stroke();
+
+      // Cabeza catalítica F1 (Rotando suavemente)
+      atpSynthAngle += 0.05;
+      ctx.save();
+      ctx.translate(710, 250);
+      ctx.rotate(atpSynthAngle);
+      ctx.fillStyle = '#10b981';
+      ctx.beginPath(); ctx.arc(0, 0, 36, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = '#a7f3d0'; ctx.lineWidth = 3; ctx.stroke();
+      // Rayas indicadoras de giro
+      ctx.strokeStyle = '#064e3b';
+      ctx.beginPath(); ctx.moveTo(-30, 0); ctx.lineTo(30, 0); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, -30); ctx.lineTo(0, 30); ctx.stroke();
+      ctx.restore();
+
+      ctx.fillStyle = '#ffffff'; ctx.font = 'bold 10px Inter';
+      ctx.fillText('ATP Sintasa', 710, 305);
+      ctx.fillStyle = '#fef08a'; ctx.font = 'bold 9px monospace';
+      ctx.fillText('ADP + Pi → ATP', 710, 320);
+
+      // Flecha flujo de protones por sintasa
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = '12px Inter';
+      ctx.fillText('↓↓ H+', 710, 65);
+
+      // Dibujar y Actualizar Protones flotantes (Gradiente H+)
+      ctx.fillStyle = '#38bdf8';
+      protons.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 20 || p.x > w - 20) p.vx *= -1;
+        if (p.y < 35 || p.y > 115) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // Dibujar electrones transitando
+      ctx.fillStyle = '#fbbf24';
+      ctx.shadowColor = '#f59e0b';
+      ctx.shadowBlur = 8;
+      electrons.forEach(e => {
+        e.progress += 0.015;
+        if (e.progress > 1) {
+          e.progress = 0;
+          e.step = (e.step + 1) % 4;
+        }
+
+        let ex = 140, ey = 160;
+        if (e.step === 0) { // C I a CoQ
+          ex = 140 + e.progress * (220 - 140);
+          ey = 160 + Math.sin(e.progress * Math.PI) * -15;
+        } else if (e.step === 1) { // CoQ a C III
+          ex = 220 + e.progress * (340 - 220);
+          ey = 165;
+        } else if (e.step === 2) { // C III a Cit c
+          ex = 340 + e.progress * (420 - 340);
+          ey = 150 - e.progress * 45;
+        } else if (e.step === 3) { // Cit c a C IV
+          ex = 420 + e.progress * (512 - 420);
+          ey = 105 + e.progress * 55;
+        }
+
+        ctx.beginPath();
+        ctx.arc(ex, ey, 5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.shadowBlur = 0; // reset shadow
+      ctx.textAlign = 'left';
+    }
+
+    // =========================================================================
+    // 5. MÓDULO 5: FISIOPATOLOGÍA COMPARADA (CONMUTADOR)
+    // =========================================================================
+    const pathologies = {
+      normal: {
+        title: "1. Estado Fisiológico Normal (Homeostasis Tisular)",
+        badge: "Homeostasis",
+        badgeBg: "bg-blue-900 text-blue-200",
+        o2: 100, grad: 100, atp: 100, heat: 20,
+        o2Txt: "100%", gradTxt: "180 mV (Máximo)", atpTxt: "100% (Normal)", heatTxt: "Basal",
+        desc: "Los electrones fluyen con fluidez a través de los complejos I a IV gracias al aceptor terminal $\\text{O}_2$. El gradiente de protones generado alimenta a la $\\text{ATP}$ sintasa para sostener las demandas energéticas de la célula.",
+        clinicalDetails: `
+          <p><strong>Causa Primaria:</strong> Flujo sostenido de sustratos y oxígeno normóxico en sangre arterial.</p>
+          <p><strong>Estado de los Transportadores:</strong> Equilibrio dinámico normal entre formas oxidadas y reducidas ($\\text{NADH}/\\text{NAD}^+$ bajo control de demanda celular).</p>
+          <p><strong>Impacto Tisular:</strong> Mantenimiento perfecto del potencial de reposo celular, bombeo de calcio al retículo sarcoplásmico y contracción viable.</p>
+        `,
+        alert: "<strong>Correlación de Ingreso UCCuyo:</strong> La fosforilación oxidativa depende de la integridad estructural de la membrana mitocondrial interna y la disponibilidad de oxígeno."
+      },
+      ischemia: {
+        title: "2. Isquemia / Anoxia (Infarto Agudo de Miocardio)",
+        badge: "Colapso Hipóxico",
+        badgeBg: "bg-red-900 text-red-200",
+        o2: 0, grad: 10, atp: 5, heat: 5,
+        o2Txt: "0% (Ausente)", gradTxt: "Colapsado (~15 mV)", atpTxt: "< 5% (Depleción)", heatTxt: "Nulo",
+        desc: "<strong>Bloqueo Retrógrado Masivo:</strong> Al faltar el aceptor terminal $\\text{O}_2$, los electrones se acumulan en el Complejo IV, luego en Cit c, Complejo III, CoQ y Complejo I. Todos quedan permanentemente <em>reducidos</em>. Cesa el bombeo de protones, el gradiente desaparece y la síntesis de $\\text{ATP}$ cae a cero.",
+        clinicalDetails: `
+          <p><strong>Clínica Cardiovascular:</strong> Dolor precordial opresivo típico, elevación del segmento ST en el ECG y liberación de troponinas por necrosis miocárdica.</p>
+          <p><strong>Catástrofe Osmótica:</strong> Al fallar la bomba $\\text{Na}^+/\\text{K}^+\\text{ ATPasa}$, entra $\\text{Na}^+$ y agua en el cardiomiocito, provocando tumefacción celular y lisis irreversible.</p>
+          <p><strong>Acidosis Láctica:</strong> La glucólisis anaeróbica intenta compensar sin éxito produciendo lactato y bajando el $\\text{pH}$ intracelular.</p>
+        `,
+        alert: "<strong>Alerta Médica:</strong> ¡Tiempo es músculo! La reperfusión coronaria debe lograrse antes de que la depleción total de $\\text{ATP}$ desencadene necrosis celular irreversible."
+      },
+      cyanide: {
+        title: "3. Asfixia Histotóxica (Intoxicación Aguda por Cianuro / CO)",
+        badge: "Bloqueo Enzimático",
+        badgeBg: "bg-purple-900 text-purple-200",
+        o2: 100, grad: 15, atp: 8, heat: 5,
+        o2Txt: "100% (Sangre Roja Brillante)", gradTxt: "Colapsado", atpTxt: "< 8% (Letal)", heatTxt: "Nulo",
+        desc: "<strong>Paradoja Histotóxica:</strong> Hay abundante oxígeno disuelto y unido a hemoglobina (el paciente no está cianótico; la sangre venosa es de color rojo brillante). Sin embargo, el ion $\\text{CN}^-$ se une con altísima afinidad al centro $\\text{Fe}^{3+}/\\text{Cu}^{2+}$ de la citocromo oxidasa (Complejo IV), impidiendo la transferencia de electrones al $\\text{O}_2$.",
+        clinicalDetails: `
+          <p><strong>Hallazgo Gasométrico Típico:</strong> Hiperoxemia venosa (la diferencia arterio-venosa de $\\text{O}_2$ se aproxima a cero porque las células son incapaces de consumirlo).</p>
+          <p><strong>Toxicología de Emergencia:</strong> Acidosis metabólica láctica fulminante en minutos. Pérdida rápida de la conciencia y paro respiratorio central.</p>
+          <p><strong>Antídotos Específicos:</strong> Hidroxocobalamina (vitamina $\\text{B}_{12a}$ que capta el cianuro como cianocobalamina) y nitritos para inducir metahemoglobina captadora.</p>
+        `,
+        alert: "<strong>Pregunta Típica de Examen UCCuyo:</strong> En la intoxicación por cianuro la $\\text{pO}_2$ arterial es normal, pero la respiración celular está totalmente abolida a nivel del Complejo IV."
+      },
+      ucp1: {
+        title: "4. Desacoplamiento Fisiológico: UCP-1 / Termogenina",
+        badge: "Termogénesis Activa",
+        badgeBg: "bg-amber-900 text-amber-200",
+        o2: 100, grad: 30, atp: 20, heat: 100,
+        o2Txt: "Consumo Hiperactivo (150%)", gradTxt: "Disipado por Poro UCP-1", atpTxt: "Bajo (Disociado)", heatTxt: "100% (Máxima Producción)",
+        desc: "<strong>Quimiosmosis Cortocircuitada:</strong> La cadena respiratoria bombea protones activamente y consume ingentes cantidades de $\\text{O}_2$. Sin embargo, el canal <strong>UCP-1 (Termogenina)</strong> en la membrana interna permite que los protones reingresen a la matriz eludiendo a la $\\text{ATP}$ sintasa. La energía libre de Gibbs no se conserva en enlaces químicos, sino que se libera en su totalidad como <em>calor térmico puro</em>.",
+        clinicalDetails: `
+          <p><strong>Fisiología Neonatal:</strong> Los recién nacidos poseen abundante tejido adiposo pardo interescapular y axilar. Dado que no poseen reflejo de tiritar desarrollado ni aislamiento adiposo blanco maduro, dependen de UCP-1 para no entrar en hipotermia mortal.</p>
+          <p><strong>Control Neuroendocrino:</strong> Estimulado por el sistema simpático mediante noradrenalina y receptores $\\beta_3$-adrenérgicos que activan lipólisis de ácidos grasos libres que abren UCP-1.</p>
+          <p><strong>DNP (Dinitrofenol):</strong> Fármaco desacoplador sintético ilegal que causa hipertermia maligna mortal por el mismo principio biofísico.</p>
+        `,
+        alert: "<strong>Concepto Clave:</strong> Un desacoplador no inhibe el flujo de electrones ni el consumo de oxígeno; por el contrario, ¡los acelera! Pero disipa el gradiente sin fabricar ATP."
+      }
+    };
+
+    function selectPathology(key) {
+      const p = pathologies[key];
+      if (!p) return;
+
+      // Actualizar botones
+      document.querySelectorAll('.path-btn').forEach(btn => {
+        if (btn.getAttribute('data-path') === key) {
+          btn.className = "path-btn px-4 py-2.5 rounded-xl text-xs font-bold transition-all border border-blue-600 bg-blue-50 text-blue-800 shadow-sm";
+        } else {
+          btn.className = "path-btn px-4 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-200 text-slate-700 hover:bg-slate-50";
+        }
+      });
+
+      // Actualizar UI
+      document.getElementById('path-title').innerText = p.title;
+      const badge = document.getElementById('path-badge');
+      badge.innerText = p.badge;
+      badge.className = `px-2.5 py-0.5 rounded-full text-xs font-mono font-bold ${p.badgeBg}`;
+
+      document.getElementById('gauge-o2-val').innerText = p.o2Txt;
+      document.getElementById('gauge-o2-bar').style.width = p.o2 + "%";
+
+      document.getElementById('gauge-grad-val').innerText = p.gradTxt;
+      document.getElementById('gauge-grad-bar').style.width = p.grad + "%";
+
+      document.getElementById('gauge-atp-val').innerText = p.atpTxt;
+      document.getElementById('gauge-atp-bar').style.width = p.atp + "%";
+
+      document.getElementById('gauge-heat-val').innerText = p.heatTxt;
+      document.getElementById('gauge-heat-bar').style.width = p.heat + "%";
+
+      document.getElementById('path-desc-box').innerHTML = p.desc;
+      document.getElementById('path-clinical-details').innerHTML = p.clinicalDetails;
+      document.getElementById('path-clinical-alert').innerHTML = p.alert;
+
+      renderMathWhenReady();
+    }
+
+    // =========================================================================
+    // 6. MÓDULO 6: INTEGRACIÓN METABÓLICA & EVALUACIÓN CLÍNICA
+    // =========================================================================
+    const flowSteps = {
+      1: {
+        title: "Paso 1: Glicólisis Citoplasmática",
+        content: `
+          <p><strong>Ubicación:</strong> Citosol celular soluble.</p>
+          <p><strong>Reacción Neta:</strong> $\\text{Glucosa} + 2\\,\\text{NAD}^+ + 2\\,\\text{ADP} + 2\\,\\text{P}_i \\longrightarrow 2\\,\\text{Piruvato} + 2\\,\\text{NADH} + 2\\,\\text{H}^+ + 2\\,\\text{ATP}$.</p>
+          <p><strong>Significado Bioenergético:</strong> Es la única ruta capaz de producir $\\text{ATP}$ en ausencia estricta de oxígeno (fosforilación a nivel de sustrato). El piruvato generado entra a la mitocondria mediante el transportador específico MPC.</p>
+        `
+      },
+      2: {
+        title: "Paso 2: Complejo Piruvato Deshidrogenasa (PDH)",
+        content: `
+          <p><strong>Ubicación:</strong> Matriz mitocondrial.</p>
+          <p><strong>Reacción Neta:</strong> $\\text{Piruvato} + \\text{CoA-SH} + \\text{NAD}^+ \\longrightarrow \\text{Acetil-CoA} + \\text{CO}_2 + \\text{NADH} + \\text{H}^+$.</p>
+          <p><strong>Puente Irreversible:</strong> Conecta el catabolismo de glúcidos con el ciclo de Krebs. Requiere 5 coenzimas derivadas de vitaminas: TPP ($\\text{B}_1$), FAD ($\\text{B}_2$), NAD ($\\text{B}_3$), CoA ($\\text{B}_5$) y Lipoato.</p>
+        `
+      },
+      3: {
+        title: "Paso 3: Ciclo de Krebs (Ácido Cítrico) y Beta-Oxidación",
+        content: `
+          <p><strong>Ubicación:</strong> Matriz mitocondrial.</p>
+          <p><strong>Rendimiento por Acetil-CoA:</strong> $3\\,\\text{NADH} + 1\\,\\text{FADH}_2 + 1\\,\\text{GTP} (\\text{ATP}) + 2\\,\\text{CO}_2$.</p>
+          <p><strong>Función Clave:</strong> No consume oxígeno directamente, pero extrae los electrones de los sustratos cargando coenzimas transportadoras que viajarán hacia la membrana interna.</p>
+        `
+      },
+      4: {
+        title: "Paso 4: Cadena de Transporte de Electrones y Bombeo",
+        content: `
+          <p><strong>Ubicación:</strong> Membrana mitocondrial interna.</p>
+          <p><strong>Mecanismo:</strong> Los electrones de $\\text{NADH}$ (Complejo I) y $\\text{FADH}_2$ (Complejo II) fluyen en cascada favorable hacia el $\\text{O}_2$. La energía liberada bombea $10\\,\\text{H}^+$ por cada par de electrones desde el $\\text{NADH}$ al espacio intermembrana.</p>
+        `
+      },
+      5: {
+        title: "Paso 5: Quimiosmosis y Síntesis Rotatoria de ATP",
+        content: `
+          <p><strong>Ubicación:</strong> Crestas mitocondriales (Complejo V).</p>
+          <p><strong>Fuerza Protón-Motriz:</strong> La diferencia de potencial químico ($\Delta\\text{pH}$) y eléctrico ($\Delta\\psi$) fuerza el retorno de $\\text{H}^+$ a través de la $\\text{ATP}$ sintasa, haciendo rotar el tallo catalítico para fosforilar $\\text{ADP} + \\text{P}_i \\to \\text{ATP}$.</p>
+        `
+      },
+      6: {
+        title: "Paso 6: Exportación por ANT y Consumo Celular",
+        content: `
+          <p><strong>Ubicación:</strong> Antiporte ADP/ATP y trabajo efector.</p>
+          <p><strong>Destino:</strong> El $\\text{ATP}^{4-}$ sintetizado es exportado al citosol donde es consumido en milisegundos por la bomba $\\text{Na}^+/\\text{K}^+$, la relajación de la miosina muscular y la síntesis macromolecular, regenerando $\\text{ADP}$ para un nuevo ciclo.</p>
+        `
+      }
+    };
+
+    function showFlowStep(step) {
+      for (let i = 1; i <= 6; i++) {
+        const btn = document.getElementById(`flow-btn-${i}`);
+        if (i === step) {
+          btn.className = "flow-step-btn text-left p-3.5 rounded-xl border border-teal-600 bg-teal-50 text-teal-900 transition shadow-sm";
+          btn.querySelector('span').className = "text-[10px] font-mono font-bold text-teal-700 block mb-1";
+        } else {
+          btn.className = "flow-step-btn text-left p-3.5 rounded-xl border border-slate-200 bg-white text-slate-700 transition hover:shadow-sm";
+          btn.querySelector('span').className = "text-[10px] font-mono font-bold text-slate-400 block mb-1";
+        }
+      }
+
+      const box = document.getElementById('flow-detail-box');
+      box.innerHTML = `
+        <h4 class="text-sm font-bold text-teal-900 mb-2">${flowSteps[step].title}</h4>
+        ${flowSteps[step].content}
+      `;
+      renderMathWhenReady();
+    }
+
+    // =========================================================================
+    // INICIALIZACIÓN GLOBAL AL CARGAR LA VENTANA
+    // =========================================================================
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathWhenReady();
+    });
+
+    window.onload = function() {
+      // Iniciar simulación gráfica de Gibbs
+      updateGibbsValues();
+      drawGibbsGraph();
+
+      // Iniciar partículas de cadena de transporte
+      initEtcParticles();
+      startEtcLoop();
+
+      // Configurar paso inicial de flujo integrado
+      showFlowStep(1);
+
+      // Render inicial de KaTeX
+      setTimeout(renderMathWhenReady, 100);
+
+      // Redibujado adaptativo ante cambio de tamaño de ventana
+      window.addEventListener('resize', () => {
+        drawGibbsGraph();
+        drawEtcSimulation();
+      });
+    };
+  </script>
+</body>
+</html>
